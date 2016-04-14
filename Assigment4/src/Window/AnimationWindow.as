@@ -1,20 +1,21 @@
 package Window
 {
 	import flash.geom.Rectangle;
+	import flash.utils.Dictionary;
 	
 	import Component.ButtonClass;
-	import Component.RadioButtonClass;
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.textures.Texture;
-	
+	import starling.events.Touch;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	
 	public class AnimationWindow extends Sprite
 	{
 		
-		private var _cloaderClass: LoaderClass;
+		private var _componentDictionary: Dictionary;
 		
 		private var _windowRect : Rectangle;
 		
@@ -22,23 +23,26 @@ package Window
 		private var _stopButton : ButtonClass;
 		private var _pauseButton : ButtonClass;
 		private var _loadSpriteButton : ButtonClass;
-	
-		
-		public function AnimationWindow(posx:int, posy:int, width:int, height:int, cloaderClass :LoaderClass)
+
+		public function AnimationWindow(posx:int, posy:int, width:int, height:int, componentDictionary :Dictionary)
 		{
 			_windowRect = new Rectangle(posx, posy, width, height);
-			_cloaderClass = cloaderClass;
+			_componentDictionary = componentDictionary;
 			addEventListener(Event.ADDED_TO_STAGE, onDrawWindow);
 		}
-		
+		/**
+		 * 
+		 * @param e
+		 * Note @유영선 Window창에 그리는 이벤트
+		 */		
 		public function onDrawWindow(e:Event) : void
 		{
-			var viewerImage:Image = new Image(Texture.fromBitmap(_cloaderClass.getComponentDictionary()["Window.png"]));
+			var viewerImage:Image = new Image(_componentDictionary["Window.png"]);
 			
-			var startImage:Image = new Image(Texture.fromBitmap(_cloaderClass.getComponentDictionary()["Start.png"]));
-			var stopImage:Image = new Image(Texture.fromBitmap(_cloaderClass.getComponentDictionary()["Stop.png"]));
-			var pauseImage:Image = new Image(Texture.fromBitmap(_cloaderClass.getComponentDictionary()["Pause.png"]));
-			var loadImage : Image = new Image(Texture.fromBitmap(_cloaderClass.getComponentDictionary()["LoadSprite.png"]));
+			var startImage:Image = new Image(_componentDictionary["Start.png"]);
+			var stopImage:Image = new Image(_componentDictionary["Stop.png"]);
+			var pauseImage:Image = new Image(_componentDictionary["Pause.png"]);
+			var loadImage : Image = new Image(_componentDictionary["LoadSprite.png"]);
 			
 			_startButton = new ButtonClass(new Rectangle(_windowRect.width/2+150, viewerImage.height+40, startImage.width, startImage.height),startImage);
 			_stopButton = new ButtonClass(new Rectangle(_windowRect.width/2+220, viewerImage.height+40, stopImage.width, stopImage.height),stopImage);
@@ -54,8 +58,33 @@ package Window
 			addChild(_startButton.getButton());
 			addChild(_stopButton.getButton());
 			addChild(_loadSpriteButton.getButton());
+			
+			_loadSpriteButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
+		}
+		/**
+		 * 
+		 * @param e
+		 *Note @유영선 Window창에 있는 버튼을 클릭 했을때 이벤트 
+		 */		
+		private function onButtonClick(e:TouchEvent): void
+		{
+			var touch:Touch = e.getTouch(stage,TouchPhase.BEGAN);
+			
+			if(touch)
+			{
+				if(e.currentTarget == _loadSpriteButton.getButton())
+				{
+					drawAnimation();
+				}
+			}
+		}
+		
+		private function drawAnimation() : void
+		{
+			//var xml:XML = _cloader.getxmlVector()[0];
+			
+			//_cAnimation = new Atlastexture(Texture.fromBitmap(_cloader.getSpriteSheetDictionary()["Sprite_Sheet[0].png"]), xml);
 		}
 	}
-	
-	
+		
 }

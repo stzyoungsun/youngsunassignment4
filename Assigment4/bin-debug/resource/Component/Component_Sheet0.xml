@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas ImagePath="sprite_sheet[0].png">
+<SubTexture name="Window.png" x="0" y="0" width="512" height="256 "/>
+<SubTexture name="LoadSprite.png" x="0" y="256" width="200" height="55 "/>
+<SubTexture name="Start.png" x="0" y="311" width="64" height="64 "/>
+<SubTexture name="Pause.png" x="64" y="311" width="64" height="64 "/>
+<SubTexture name="Stop.png" x="128" y="311" width="64" height="64 "/>
+<SubTexture name="RadioON.png" x="0" y="375" width="32" height="32 "/>
+<SubTexture name="RadioOFF.png" x="0" y="407" width="32" height="32 "/>
+</TextureAtlas>

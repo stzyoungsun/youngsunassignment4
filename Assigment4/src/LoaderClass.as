@@ -5,7 +5,9 @@ package
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.filesystem.File;
+	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.net.URLVariables;
 	import flash.utils.Dictionary;
 	
 	public class LoaderClass
@@ -20,11 +22,13 @@ package
 		
 		private var _spriteSheetDictionary : Dictionary = new Dictionary();
 		private var _componentDictionary : Dictionary = new Dictionary();
-		private var _xmlDictionary : Dictionary = new Dictionary();
+		private var _xmlDictionary : Dictionary = new Dictionary;
+		
+		private var _spriteName : Vector.<String> = new Vector.<String>;
 		
 		private var _urlArray:Array = new Array();					//파일명이 담긴 배열
 		private var _fileDataArray:Array = new Array();			   //파일이 담김 배열
-		
+		private var _loaderXML:URLLoader;
 		private var _completeFunction:Function;
 		public function LoaderClass(completeFunction : Function)
 		{
@@ -38,6 +42,7 @@ package
 			getResource("resource/Component");
 			getResource("resource/SpriteSheet");
 			buildLoader();
+			buildXMLLoader();
 		}
 		
 		/**
@@ -53,7 +58,7 @@ package
 			for(var i:int = 0; i<array.length; ++i)
 			{				
 				
-				var url:String = array[i].url; 
+				var url:String = decodeURIComponent(array[i].url); 
 				
 				var extension:String = url.substr(url.lastIndexOf(".") + 1, url.length);
 				
@@ -62,16 +67,28 @@ package
 					url = url.substring(5, url.length);	
 					
 					_urlArray.push(decodeURIComponent(url));					
-					
+				}
+				//XML Loader
+				else if(extension == "XML" || extension == "xml")
+				{
+					url = url.substring(5, url.length);	
+					_spriteName.push(url);
 				}
 			}
 		}
 		
-	
+		
+		private function buildXMLLoader():void
+		{
+			
+			_loaderXML = new URLLoader(new URLRequest(_spriteName[0]));
+			_loaderXML.addEventListener(Event.COMPLETE, onLoadXMLComplete);
+		}
 		
 		private function buildLoader():void
 		{
 			sImageMaxCount =_urlArray.length; 
+			sImageMaxCount+=_spriteName.length;
 			
 			for(var i:int = 0; i<_urlArray.length; ++i)
 			{
@@ -109,6 +126,28 @@ package
 		
 		/**
 		 * 
+		 * @param e
+		 * Note @유영선 XML 로딩 진행
+		 */		
+		private function onLoadXMLComplete(e:Event):void
+		{
+
+			_loaderXML.removeEventListener(Event.COMPLETE, onLoadXMLComplete);
+			var extension:Array = _spriteName[0].split('/');
+			_xmlDictionary[extension[2]] = XML(e.currentTarget.data);
+			_spriteName.removeAt(0);
+			//_xmlVector.push(XML(e.currentTarget.data));
+			chedckedImage();
+			
+			if(_spriteName.length != 0)
+			{
+				_loaderXML = new URLLoader(new URLRequest(_spriteName[0]));
+				_loaderXML.addEventListener(Event.COMPLETE, onLoadXMLComplete)
+			}	
+		}
+		
+		/**
+		 * 
 		 * Note @유영선 이미지가 모두 로딩 된 후에 Mainclass에 완료 함수 호출
 		 */		
 		private function chedckedImage() : void
@@ -134,6 +173,11 @@ package
 		public function getComponentDictionary() : Dictionary
 		{
 			return _componentDictionary;
+		}
+		
+		public function getxmlDictionary() :  Dictionary
+		{
+			return _xmlDictionary;
 		}
 	}
 }

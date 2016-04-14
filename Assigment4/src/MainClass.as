@@ -2,6 +2,7 @@ package
 {
 	import flash.geom.Rectangle;
 	
+	import Component.Atlastexture;
 	import Component.RadioButtonClass;
 	
 	import Window.AnimationWindow;
@@ -23,6 +24,7 @@ package
 	{
 		private var _cLoader : LoaderClass;
 		private var _cAnimation : AnimationWindow;
+		private var _componentAtlas : Atlastexture; 
 		
 		private var _radioButton : Vector.<RadioButtonClass> = new Vector.<RadioButtonClass>;    //라디오 버튼은  Animation/Image Window를 조절 하는 버튼 이므로 Main에 삽입
 		public function MainClass()
@@ -33,7 +35,6 @@ package
 		public function initialize() : void
 		{
 			_cLoader = new LoaderClass(completeLoadImage);
-	
 		}
 		/**
 		 *Note @유영선 이미지 로딩 완료 후 AnimationWindow 창 로드  
@@ -41,8 +42,8 @@ package
 		 */		
 		private function completeLoadImage() : void
 		{
-			
-			_cAnimation = new AnimationWindow(0,30,stage.stageWidth,stage.stageHeight,_cLoader);
+			_componentAtlas = new Atlastexture(Texture.fromBitmap(_cLoader.getComponentDictionary()["Component_Sheet0.png"]),_cLoader.getxmlDictionary()["Component_Sheet0.xml"]);
+			_cAnimation = new AnimationWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet());
 			addChild(_cAnimation);
 			
 			drawRadioButton();
@@ -53,11 +54,11 @@ package
 		 */		
 		private function drawRadioButton() : void
 		{
-			var RadioOFFImageA:Image = new Image(Texture.fromBitmap(_cLoader.getComponentDictionary()["RadioOFF.png"]));
-			var RadioONImageA:Image = new Image(Texture.fromBitmap(_cLoader.getComponentDictionary()["RadioON.png"]));
+			var RadioOFFImageA:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioOFF.png"]);
+			var RadioONImageA:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioON.png"]);
 			
-			var RadioOFFImageI:Image = new Image(Texture.fromBitmap(_cLoader.getComponentDictionary()["RadioOFF.png"]));
-			var RadioONImageI:Image = new Image(Texture.fromBitmap(_cLoader.getComponentDictionary()["RadioON.png"]));
+			var RadioOFFImageI:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioOFF.png"]);
+			var RadioONImageI:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioON.png"]);
 			
 			_radioButton[0] = new RadioButtonClass(new Rectangle(230, 310, 200, 150), RadioONImageA,RadioOFFImageA,"Animation Mode");
 			_radioButton[1] = new RadioButtonClass(new Rectangle(230, 360,200, 150), RadioONImageI,RadioOFFImageI,"Image Mode");	
