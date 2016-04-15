@@ -2,9 +2,12 @@ package
 {
 	import flash.geom.Rectangle;
 	
+	import Animaiton.Atlastexture;
+	
 	import Component.RadioButtonClass;
 	
 	import Window.AnimationWindow;
+	import Window.ImageWindow;
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -13,8 +16,6 @@ package
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
-	import Animaiton.Atlastexture;
-	import Window.ImageWindow;
 	
 	/**
 	 * 
@@ -45,17 +46,15 @@ package
 		private function completeLoadImage() : void
 		{
 			_componentAtlas = new Atlastexture(Texture.fromBitmap(_cLoader.getSpriteSheetDictionary()["Component_Sheet0.png"]),_cLoader.getxmlDictionary()["Component_Sheet0.xml"]);
-			_cAnimationWindow = new AnimationWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet());
-			_cImageWindow = new ImageWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet());
+			_cAnimationWindow = new AnimationWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet(),drawRadioButton);
+			
 			addChild(_cAnimationWindow);
-			addChild(_cImageWindow);
-			drawRadioButton();
 		}
 		/**
 		 * Note @유영선 두개의 라디오 버튼을 생성  
 		 * 
 		 */		
-		private function drawRadioButton() : void
+		private function drawRadioButton(curTexture : Atlastexture) : void
 		{
 			var RadioOFFImageA:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioOFF.png"]);
 			var RadioONImageA:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioON.png"]);
@@ -63,15 +62,23 @@ package
 			var RadioOFFImageI:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioOFF.png"]);
 			var RadioONImageI:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioON.png"]);
 			
-			_radioButton[0] = new RadioButtonClass(new Rectangle(280, 410, 200, 150), RadioONImageA,RadioOFFImageA,"Animation Mode");
-			_radioButton[1] = new RadioButtonClass(new Rectangle(280, 460,200, 150), RadioONImageI,RadioOFFImageI,"Image Mode");	
+			_radioButton[0] = new RadioButtonClass(new Rectangle(345, 480, 200, 150), RadioONImageA,RadioOFFImageA,"Animation Mode");
+			_radioButton[1] = new RadioButtonClass(new Rectangle(345, 530,200, 150), RadioONImageI,RadioOFFImageI,"Image Mode");	
 			_radioButton[1].swtichClicked(false);
+			
+			
+			
+			_radioButton[0].getRadioButton().addEventListener(TouchEvent.TOUCH,onRadioClick);
+			_radioButton[1].getRadioButton().addEventListener(TouchEvent.TOUCH,onRadioClick);
+			
+			
 			
 			addChild(_radioButton[0].getRadioButton());
 			addChild(_radioButton[1].getRadioButton());
 			
-			_radioButton[0].getRadioButton().addEventListener(TouchEvent.TOUCH,onRadioClick);
-			_radioButton[1].getRadioButton().addEventListener(TouchEvent.TOUCH,onRadioClick);
+			_cImageWindow = new ImageWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet(),curTexture);
+			_cImageWindow.visible = false;
+			addChild(_cImageWindow);
 		}
 		
 		private function onRadioClick(e:TouchEvent): void

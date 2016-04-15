@@ -42,13 +42,14 @@ package Window
 		private var _loadFile:File = new File(); 
 		private var _cClip : AnimaitonClip;
 		
+		private var _createImagewindow : Function;
 		private var _viewButtonCnt : int = 0;
 		private var _drawFirst : Boolean = false;
-		public function AnimationWindow(posx:int, posy:int, width:int, height:int, componentDictionary :Dictionary)
+		public function AnimationWindow(posx:int, posy:int, width:int, height:int, componentDictionary :Dictionary, createImagewindow : Function)
 		{
 			_windowRect = new Rectangle(posx, posy, width, height);
 			_componentDictionary = componentDictionary;
-			
+			_createImagewindow = createImagewindow;
 			addEventListener(starling.events.Event.ADDED_TO_STAGE, onDrawWindow);
 		}
 		/**
@@ -227,12 +228,13 @@ package Window
 			
 			var spritexml : String = spriteName.replace("png","xml");
 			var spriteImage : Image = new Image(Texture.fromBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName]));
-			var at : Atlastexture = new Atlastexture(Texture.fromBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName]),_cSpriteLoader.getxmlDictionary()[spritexml]);
-			_cClip= new AnimaitonClip(at.getsubVector(),5,drawAnimation);
+			var subTexture : Atlastexture = new Atlastexture(Texture.fromBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName]),_cSpriteLoader.getxmlDictionary()[spritexml]);
+			_cClip= new AnimaitonClip(subTexture.getsubVector(),5,drawAnimation);
 			_cClip.x = 30;
 			_cClip.y = 100;
 			
 			addChild(_cClip);
+			_createImagewindow(subTexture);
 		}
 		/**
 		 * 
@@ -242,6 +244,11 @@ package Window
 		private function drawAnimation(_textures : Texture) : void
 		{
 			_cClip.texture = _textures;
+		}
+		
+		public function getButtonlist() : ButtonListClass
+		{
+			return _buttonList;
 		}
 	}
 		

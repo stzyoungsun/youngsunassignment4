@@ -26,7 +26,6 @@ package Animaiton
 			 function timerActive():void
 			{
 				
-				trace("123")
 				animation(_textures[_ImageNum++]);
 		
 				if(_ImageNum == _textures.length)

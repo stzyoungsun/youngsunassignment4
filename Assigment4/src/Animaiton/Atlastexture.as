@@ -12,7 +12,7 @@ package Animaiton
 		private var _subSpriteSheet: Dictionary;
 		private var _subSheetVector:Vector.<Texture> = new Vector.<Texture>;
 		
-		private var _subTextureNames:Vector.<String >;
+		private var _subTextureNames:Vector.<String> = new Vector.<String>;
 		
 		public function Atlastexture(sprtieSheet:Texture, spriteXml:XML = null)
 		{
@@ -24,7 +24,11 @@ package Animaiton
 				parseAtlasXml(spriteXml);
 			}
 		}
-		
+		/**
+		 * 
+		 * @param spriteXml
+		 * Note @유영선 xml에 Subtexture에 접근하여 원하는 정보를 얻어 옵니다 
+		 */		
 		protected function parseAtlasXml(spriteXml:XML):void
 		{
 			var region:Rectangle = new Rectangle();
@@ -47,16 +51,23 @@ package Animaiton
 		{
 			_subSpriteSheet[name] =  Texture.fromTexture(_sprtieSheet,region);
 			_subSheetVector.push(Texture.fromTexture(_sprtieSheet,region));
+			_subTextureNames.push(name);
 		}
 		
-		public function getsubSpriteSheet() :Dictionary
+		public function getsubSpriteSheet() :Dictionary   //subtecture를  Dictionary로 리턴
 		{
 			return _subSpriteSheet;
 		}
 		
-		public function getsubVector() : Vector.<Texture>
+		public function getsubVector() : Vector.<Texture>	//subtecture를  Vector로 리턴
 		{
 			return _subSheetVector;
 		}
+		public function getsubTextureName() : Vector.<String > //subtecture에 이름만 리턴
+		{
+			return _subTextureNames;
+		}
+	
+		
 	}
 }
