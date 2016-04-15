@@ -16,14 +16,15 @@ package
 		 * 기존에 구현 했던 Loaderclass 수정
 		 * 
 		 */		
-		public static var sCurrentCount : int = 0;
+		private var _currentCount : int = 0;
 		public static var sImageMaxCount :int;
 		private static var _selectPath:String;
 		
 		private var _spriteSheetDictionary : Dictionary = new Dictionary();
 		private var _xmlDictionary : Dictionary = new Dictionary;
 		
-		private var _spriteName : Vector.<String> = new Vector.<String>;
+		private var _spriteName : Vector.<String> = new Vector.<String>; 
+		private var _xmlName : Vector.<String> = new Vector.<String>;  //XML 한 개씩 출력으르 조절 하기 위한 변수
 		
 		private var _urlArray:Array = new Array();					//파일명이 담긴 배열
 		private var _fileDataArray:Array = new Array();			   //파일이 담김 배열
@@ -87,7 +88,7 @@ package
 				{
 					if(_selectPath == null)
 						url = url.substring(5, url.length);	
-					_spriteName.push(url);
+					_xmlName.push(url);
 				}
 			}
 		}
@@ -96,14 +97,14 @@ package
 		private function buildXMLLoader():void
 		{
 			
-			_loaderXML = new URLLoader(new URLRequest(_spriteName[0]));
+			_loaderXML = new URLLoader(new URLRequest(_xmlName[0]));
 			_loaderXML.addEventListener(Event.COMPLETE, onLoadXMLComplete);
 		}
 		
 		private function buildLoader():void
 		{
 			sImageMaxCount =_urlArray.length; 
-			sImageMaxCount+=_spriteName.length;
+			sImageMaxCount+=_xmlName.length;
 			
 			for(var i:int = 0; i<_urlArray.length; ++i)
 			{
@@ -126,7 +127,7 @@ package
 			var filename:String = decodeURIComponent(loaderInfo.url);
 			var extension:Array = filename.split('/');
 			
-			
+			_spriteName.push(extension[extension.length-1]);
 			_spriteSheetDictionary[extension[extension.length-1]] =e.target.content as Bitmap;
 		
 			chedckedImage();
@@ -135,21 +136,21 @@ package
 		/**
 		 * 
 		 * @param e
-		 * Note @유영선 XML 로딩 진행
+		 * Note @유영선 XML 로딩 진행 (순서에 따라 로딩을 위해 한개씩 로딩 진행)
 		 */		
 		private function onLoadXMLComplete(e:Event):void
 		{
 
 			_loaderXML.removeEventListener(Event.COMPLETE, onLoadXMLComplete);
-			var extension:Array = _spriteName[0].split('/');
+			var extension:Array = _xmlName[0].split('/');
 			_xmlDictionary[extension[extension.length-1]] = XML(e.currentTarget.data);
-			_spriteName.removeAt(0);
+			_xmlName.removeAt(0);
 			//_xmlVector.push(XML(e.currentTarget.data));
 			chedckedImage();
 			
-			if(_spriteName.length != 0)
+			if(_xmlName.length != 0)
 			{
-				_loaderXML = new URLLoader(new URLRequest(_spriteName[0]));
+				_loaderXML = new URLLoader(new URLRequest(_xmlName[0]));
 				_loaderXML.addEventListener(Event.COMPLETE, onLoadXMLComplete)
 			}	
 		}
@@ -160,16 +161,12 @@ package
 		 */		
 		private function chedckedImage() : void
 		{
-			
-			trace(sCurrentCount);
-			if(sCurrentCount == sImageMaxCount-1) 
+			_currentCount++;
+			trace(_currentCount);
+			if(_currentCount == sImageMaxCount) 
 			{
+				
 				_completeFunction();
-				return;
-			}
-			else
-			{
-				sCurrentCount++;
 			}
 		}
 		
@@ -181,6 +178,11 @@ package
 		public function getxmlDictionary() :  Dictionary
 		{
 			return _xmlDictionary;
+		}
+		
+		public function getspriteName() : Vector.<String>
+		{
+			return _spriteName;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package Component
+package 
 {
 	
 	import flash.geom.Rectangle;

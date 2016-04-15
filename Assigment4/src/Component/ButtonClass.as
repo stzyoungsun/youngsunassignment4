@@ -22,6 +22,7 @@ package Component
 		{
 			_buttonRect = buttonRect;
 			_buttonImage = buttonImage;
+
 			
 			if(buttonText == "")
 				createImageButton();	//Image 버튼 생성
@@ -37,7 +38,6 @@ package Component
 		private function createImageButton() : void
 		{
 			_button = new Sprite();
-		
 			_button.x = _buttonRect.x;
 			_button.y = _buttonRect.y;
 			
