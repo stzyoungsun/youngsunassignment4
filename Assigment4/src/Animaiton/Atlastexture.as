@@ -1,4 +1,4 @@
-package 
+package Animaiton 
 {
 	
 	import flash.geom.Rectangle;

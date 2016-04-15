@@ -4,16 +4,20 @@ package Component
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
-
+	import starling.events.Touch;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	public class ButtonListClass
 	{
 		private var _buttonList : Sprite;
 		private var _buttonListRect : Rectangle;
 		private var _buttonListImage : Image;
 		private var _subButton : Vector.<Sprite> = new Vector.<Sprite>;
+		private var _drawSprite : Function;
 		
-		public function ButtonListClass(buttonListRect : Rectangle, buttonListImage : Image)
+		public function ButtonListClass(buttonListRect : Rectangle, buttonListImage : Image,drawSprite : Function)
 		{
+			_drawSprite = drawSprite;
 			_buttonListRect = buttonListRect;
 			_buttonListImage = buttonListImage;
 			
@@ -55,9 +59,19 @@ package Component
 			button.height=button.height/2+10;
 			button.x = x;
 			button.y = y;
+			button.addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_buttonList.addChild(button);
 		}
 		
+		private function onButtonClick(e:TouchEvent): void
+		{
+			var touch:Touch = e.getTouch(_buttonList,TouchPhase.BEGAN);
+			var button : Sprite = e.currentTarget as Sprite;
 		
+			if(touch)
+			{
+				_drawSprite(button.name);
+			}
+		}
 	}
 }

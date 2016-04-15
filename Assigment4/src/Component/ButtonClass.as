@@ -54,7 +54,8 @@ package Component
 			_button.height = _buttonRect.height;
 			
 			_button.addChild(_buttonImage);
-			
+			_button.name = buttonText;
+			trace(_button.name);
 			// TextField 객체 생성
 			var textField:TextField = new TextField(_button.width, _button.height, buttonText);
 			// 버튼 객체의 자식으로 등록

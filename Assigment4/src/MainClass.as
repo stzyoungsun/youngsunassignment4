@@ -13,6 +13,7 @@ package
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
+	import Animaiton.Atlastexture;
 	
 	/**
 	 * 

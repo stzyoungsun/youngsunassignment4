@@ -16,6 +16,7 @@ package Window
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import starling.textures.Texture;
 	
 	public class AnimationWindow extends Sprite
 	{
@@ -32,6 +33,7 @@ package Window
 		private var _buttonList : ButtonListClass;
 		private var _nextButton : ButtonClass;
 		private var _prevButton : ButtonClass;
+		private var _vewImage : Image;
 		
 		private var _fileStream:FileStream = new FileStream(); 
 		private var _loadFile:File = new File(); 
@@ -41,6 +43,7 @@ package Window
 		{
 			_windowRect = new Rectangle(posx, posy, width, height);
 			_componentDictionary = componentDictionary;
+			
 			addEventListener(starling.events.Event.ADDED_TO_STAGE, onDrawWindow);
 		}
 		/**
@@ -51,7 +54,7 @@ package Window
 		public function onDrawWindow(e:starling.events.Event) : void
 		{
 			
-			var viewerImage:Image = new Image(_componentDictionary["Window.png"]);
+			_vewImage = new Image(_componentDictionary["Window.png"]);
 			
 			var startImage:Image = new Image(_componentDictionary["Start.png"]);
 			var stopImage:Image = new Image(_componentDictionary["Stop.png"]);
@@ -61,24 +64,24 @@ package Window
 			var loadImage : Image = new Image(_componentDictionary["LoadSprite.png"]);
 			var buttonListImage : Image = new Image(_componentDictionary["List.png"]);
 			
-			viewerImage.x = _windowRect.x;
-			viewerImage.y = _windowRect.y;
-			viewerImage.width = _windowRect.width;
-			viewerImage.height = _windowRect.height/2 + 50;
+			_vewImage.x = _windowRect.x;
+			_vewImage.y = _windowRect.y;
+			_vewImage.width = _windowRect.width;
+			_vewImage.height = _windowRect.height/2 + 50;
 			
-			_startButton = new ButtonClass(new Rectangle(_windowRect.width/2+150, viewerImage.height+30, startImage.width, startImage.height),startImage);
-			_stopButton = new ButtonClass(new Rectangle(_windowRect.width/2+220, viewerImage.height+30, stopImage.width, stopImage.height),stopImage);
-			_pauseButton = new ButtonClass(new Rectangle(_windowRect.width/2+150, viewerImage.height+30, pauseImage.width, pauseImage.height),pauseImage);
-			_loadSpriteButton = new ButtonClass(new Rectangle(_windowRect.x+40, viewerImage.height+35, loadImage.width, loadImage.height),loadImage,"LoadDic SpriteSheets");
-			_nextButton = new ButtonClass(new Rectangle(_windowRect.x+190, viewerImage.height+30, nextImage.width, nextImage.height),nextImage);
-			_prevButton = new ButtonClass(new Rectangle(_windowRect.x+40, viewerImage.height+30, prevImage.width, prevImage.height),prevImage);
+			_startButton = new ButtonClass(new Rectangle(_windowRect.width/2+150, _vewImage.height+30, startImage.width, startImage.height),startImage);
+			_stopButton = new ButtonClass(new Rectangle(_windowRect.width/2+220, _vewImage.height+30, stopImage.width, stopImage.height),stopImage);
+			_pauseButton = new ButtonClass(new Rectangle(_windowRect.width/2+150, _vewImage.height+30, pauseImage.width, pauseImage.height),pauseImage);
+			_loadSpriteButton = new ButtonClass(new Rectangle(_windowRect.x+40, _vewImage.height+35, loadImage.width, loadImage.height),loadImage,"LoadDic SpriteSheets");
+			_nextButton = new ButtonClass(new Rectangle(_windowRect.x+190, _vewImage.height+30, nextImage.width, nextImage.height),nextImage);
+			_prevButton = new ButtonClass(new Rectangle(_windowRect.x+40, _vewImage.height+30, prevImage.width, prevImage.height),prevImage);
 			
-			_buttonList = new ButtonListClass(new Rectangle(_windowRect.x-30, viewerImage.height+55, loadImage.width+130, loadImage.height*2+100),buttonListImage);
-			
-			
+			_buttonList = new ButtonListClass(new Rectangle(_windowRect.x-30, _vewImage.height+55, loadImage.width+130, loadImage.height*2+100),buttonListImage,drawSprite);
 			
 			
-			addChild(viewerImage);
+			
+			
+			addChild(_vewImage);
 			addChild(_startButton.getButton());
 			addChild(_stopButton.getButton());
 			addChild(_loadSpriteButton.getButton());
@@ -150,6 +153,8 @@ package Window
 		{	
 			trace("Sprite Sheet 로드 완료");
 			removeChild(_loadSpriteButton.getButton());
+			_loadSpriteButton.getButton().removeEventListeners();
+			
 			addChild(_buttonList.getList());
 			addChild(_nextButton.getButton());
 			addChild(_prevButton.getButton());
@@ -171,6 +176,8 @@ package Window
 				var button :ButtonClass = new ButtonClass(new Rectangle(),new Image(_componentDictionary["LoadSprite.png"]),_cSpriteLoader.getspriteName()[i])
 				_buttonList.addButton(button.getButton(),65,50+buttonPos*40);
 				button.getButton().visible = false;
+				
+				
 				if(buttonPos == 2)
 					buttonPos = 0;
 				else 
@@ -196,6 +203,17 @@ package Window
 			{
 				_buttonList.getButton()[j].visible = true;
 			}
+		}
+		
+		private function drawSprite(spriteName : String) : void
+		{
+			trace(spriteName);
+			var spriteImage : Image = new Image(Texture.fromBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName]));
+			spriteImage.x = 10;
+			spriteImage.y = 50;
+			spriteImage.width = _vewImage.width-50;
+			spriteImage.height = _vewImage.height-30;
+			addChild(spriteImage);
 		}
 	}
 		
