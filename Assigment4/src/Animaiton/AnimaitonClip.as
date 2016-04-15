@@ -1,9 +1,52 @@
 package Animaiton
 {
-	public class AnimaitonClip
+
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	
+	import starling.display.Image;
+	import starling.textures.Texture;
+	
+
+	public class AnimaitonClip extends Image 
 	{
-		public function AnimaitonClip()
+		private var _timer : Timer;
+		private var _ImageNum : int = 0;
+		private var _textures : Vector.<Texture >;
+		
+		public function AnimaitonClip(textures:Vector.<Texture > ,fps:Number,animation:Function)
 		{
+			super(textures[0]);
+			_textures = textures;
+			_timer = new Timer(fps*100,0);
+			
+			_timer.addEventListener(TimerEvent.TIMER, timerActive);           //타이머가 진행 하는 함수
+			_timer.addEventListener(TimerEvent.TIMER_COMPLETE, timerComplete); //타이머가 끝났을떄
+			_timer.start();
+			
+			 function timerActive():void
+			{
+				
+				trace("123")
+				animation(_textures[_ImageNum++]);
+		
+				if(_ImageNum == _textures.length)
+					_ImageNum =0;  
+				
+			}
+			
+			 function timerComplete():void
+			{
+				_timer.removeEventListener(TimerEvent.TIMER, timerActive);
+				_timer.removeEventListener(TimerEvent.TIMER_COMPLETE, timerComplete);
+				
+			}
 		}
+		
+		public function getTimer() : Timer
+		{
+			return _timer;
+		}
+		
 	}
 }

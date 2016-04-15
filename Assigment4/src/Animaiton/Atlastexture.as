@@ -4,13 +4,14 @@ package Animaiton
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	import starling.textures.SubTexture;
 	import starling.textures.Texture;
 
 	public class Atlastexture
 	{
 		private var _sprtieSheet:Texture;
 		private var _subSpriteSheet: Dictionary;
+		private var _subSheetVector:Vector.<Texture> = new Vector.<Texture>;
+		
 		private var _subTextureNames:Vector.<String >;
 		
 		public function Atlastexture(sprtieSheet:Texture, spriteXml:XML = null)
@@ -45,11 +46,17 @@ package Animaiton
 		public function createSubTexure(name : String, region:Rectangle):void
 		{
 			_subSpriteSheet[name] =  Texture.fromTexture(_sprtieSheet,region);
+			_subSheetVector.push(Texture.fromTexture(_sprtieSheet,region));
 		}
 		
 		public function getsubSpriteSheet() :Dictionary
 		{
 			return _subSpriteSheet;
+		}
+		
+		public function getsubVector() : Vector.<Texture>
+		{
+			return _subSheetVector;
 		}
 	}
 }

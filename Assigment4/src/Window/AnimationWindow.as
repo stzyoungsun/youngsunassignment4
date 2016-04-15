@@ -7,6 +7,9 @@ package Window
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
+	import Animaiton.AnimaitonClip;
+	import Animaiton.Atlastexture;
+	
 	import Component.ButtonClass;
 	import Component.ButtonListClass;
 	
@@ -37,8 +40,10 @@ package Window
 		
 		private var _fileStream:FileStream = new FileStream(); 
 		private var _loadFile:File = new File(); 
+		var _cClip : AnimaitonClip;
 		
 		private var _viewButtonCnt : int = 0;
+		private var _drawFirst : Boolean = false;
 		public function AnimationWindow(posx:int, posy:int, width:int, height:int, componentDictionary :Dictionary)
 		{
 			_windowRect = new Rectangle(posx, posy, width, height);
@@ -89,6 +94,9 @@ package Window
 			_loadSpriteButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_nextButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_prevButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
+			_startButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
+			_pauseButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
+			_stopButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 		}
 		/**
 		 * 
@@ -119,6 +127,12 @@ package Window
 						if(_viewButtonCnt < 0)
 							_viewButtonCnt = 0;
 						viewListButton();
+						break;
+					case _startButton.getButton():
+						_cClip.getTimer().start();
+						break;
+					case _stopButton.getButton():
+						_cClip.getTimer().stop();
 						break;
 				}
 			}
@@ -208,12 +222,24 @@ package Window
 		private function drawSprite(spriteName : String) : void
 		{
 			trace(spriteName);
+			if(_drawFirst == false)
+				_drawFirst = true;
+			else
+				removeChild(_cClip);
+			
+			var spritexml : String = spriteName.replace("png","xml");
 			var spriteImage : Image = new Image(Texture.fromBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName]));
-			spriteImage.x = 10;
-			spriteImage.y = 50;
-			spriteImage.width = _vewImage.width-50;
-			spriteImage.height = _vewImage.height-30;
-			addChild(spriteImage);
+			var at : Atlastexture = new Atlastexture(Texture.fromBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName]),_cSpriteLoader.getxmlDictionary()[spritexml]);
+			_cClip= new AnimaitonClip(at.getsubVector(),5,drawAnimation);
+			_cClip.x = 30;
+			_cClip.y = 100;
+			
+			addChild(_cClip);
+		}
+		
+		private function drawAnimation(_textures : Texture) : void
+		{
+			_cClip.texture = _textures;
 		}
 	}
 		
