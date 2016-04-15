@@ -1,5 +1,9 @@
 package Window
 {
+
+	import flash.events.Event;
+	import flash.filesystem.File;
+	import flash.filesystem.FileStream;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
@@ -14,6 +18,7 @@ package Window
 	
 	public class AnimationWindow extends Sprite
 	{
+		private var _cSpriteLoader: LoaderClass;
 		
 		private var _componentDictionary: Dictionary;
 		
@@ -24,18 +29,20 @@ package Window
 		private var _pauseButton : ButtonClass;
 		private var _loadSpriteButton : ButtonClass;
 
+		private var _fileStream:FileStream = new FileStream(); 
+		private var _loadFile:File = new File(); 
 		public function AnimationWindow(posx:int, posy:int, width:int, height:int, componentDictionary :Dictionary)
 		{
 			_windowRect = new Rectangle(posx, posy, width, height);
 			_componentDictionary = componentDictionary;
-			addEventListener(Event.ADDED_TO_STAGE, onDrawWindow);
+			addEventListener(starling.events.Event.ADDED_TO_STAGE, onDrawWindow);
 		}
 		/**
 		 * 
 		 * @param e
 		 * Note @유영선 Window창에 그리는 이벤트
 		 */		
-		public function onDrawWindow(e:Event) : void
+		public function onDrawWindow(e:starling.events.Event) : void
 		{
 			var viewerImage:Image = new Image(_componentDictionary["Window.png"]);
 			
@@ -74,16 +81,28 @@ package Window
 			{
 				if(e.currentTarget == _loadSpriteButton.getButton())
 				{
-					drawAnimation();
+					CreateAnimation();
 				}
 			}
 		}
 		
-		private function drawAnimation() : void
+		private function CreateAnimation() : void
 		{
-			//var xml:XML = _cloader.getxmlVector()[0];
 			
-			//_cAnimation = new Atlastexture(Texture.fromBitmap(_cloader.getSpriteSheetDictionary()["Sprite_Sheet[0].png"]), xml);
+			_loadFile = File.applicationDirectory;
+			_loadFile.addEventListener(flash.events.Event.SELECT,onSelectHandler);
+			_loadFile.browseForDirectory("Load 할 Sprite-Sheet를 선택해주세요 (우측하단의 폴더선택을 눌러주세요!!)");
+		}
+		
+		private function onSelectHandler(e:flash.events.Event):void
+		{
+			_loadFile.removeEventListener(flash.events.Event.SELECT, onSelectHandler);
+			_cSpriteLoader = new LoaderClass(loadDropDown,_loadFile.nativePath);
+		}
+		
+		private function loadDropDown(): void
+		{
+			trace("Sprite Sheet 로드 완료");
 		}
 	}
 		

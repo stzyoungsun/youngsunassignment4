@@ -42,7 +42,7 @@ package
 		 */		
 		private function completeLoadImage() : void
 		{
-			_componentAtlas = new Atlastexture(Texture.fromBitmap(_cLoader.getComponentDictionary()["Component_Sheet0.png"]),_cLoader.getxmlDictionary()["Component_Sheet0.xml"]);
+			_componentAtlas = new Atlastexture(Texture.fromBitmap(_cLoader.getSpriteSheetDictionary()["Component_Sheet0.png"]),_cLoader.getxmlDictionary()["Component_Sheet0.xml"]);
 			_cAnimation = new AnimationWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet());
 			addChild(_cAnimation);
 			

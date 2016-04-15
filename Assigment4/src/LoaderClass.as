@@ -7,7 +7,6 @@ package
 	import flash.filesystem.File;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	import flash.net.URLVariables;
 	import flash.utils.Dictionary;
 	
 	public class LoaderClass
@@ -19,9 +18,9 @@ package
 		 */		
 		public static var sCurrentCount : int = 0;
 		public static var sImageMaxCount :int;
+		private static var _selectPath:String;
 		
 		private var _spriteSheetDictionary : Dictionary = new Dictionary();
-		private var _componentDictionary : Dictionary = new Dictionary();
 		private var _xmlDictionary : Dictionary = new Dictionary;
 		
 		private var _spriteName : Vector.<String> = new Vector.<String>;
@@ -30,8 +29,9 @@ package
 		private var _fileDataArray:Array = new Array();			   //파일이 담김 배열
 		private var _loaderXML:URLLoader;
 		private var _completeFunction:Function;
-		public function LoaderClass(completeFunction : Function)
+		public function LoaderClass(completeFunction : Function,directoryPath:String = null)
 		{
+			_selectPath = directoryPath;
 			_completeFunction = completeFunction;
 			resourceLoader();
 		}
@@ -39,8 +39,11 @@ package
 		public function resourceLoader() : void
 		{
 			var array:Array = new Array();
-			getResource("resource/Component");
-			getResource("resource/SpriteSheet");
+			if(_selectPath == null)
+				getResource("resource/Component");
+			else
+				getResource(_selectPath);
+			
 			buildLoader();
 			buildXMLLoader();
 		}
@@ -52,8 +55,18 @@ package
 		 */		
 		private function getResource(filePath : String):void
 		{
-			var directory:File = File.applicationDirectory.resolvePath(filePath);
-			var array:Array = directory.getDirectoryListing();			
+			var directory:File;
+			var array:Array;
+			if(_selectPath == null)
+			{
+				directory = File.applicationDirectory.resolvePath(filePath);
+				array = directory.getDirectoryListing();
+			}
+			else
+			{
+				directory = File.desktopDirectory.resolvePath(filePath);
+				array = directory.getDirectoryListing();
+			}
 			
 			for(var i:int = 0; i<array.length; ++i)
 			{				
@@ -64,14 +77,16 @@ package
 				
 				if(extension == "png" || extension == "jpg" || extension == "PNG" || extension == "JPG")
 				{
-					url = url.substring(5, url.length);	
+					if(_selectPath == null)
+						url = url.substring(5, url.length);	
 					
 					_urlArray.push(decodeURIComponent(url));					
 				}
 				//XML Loader
 				else if(extension == "XML" || extension == "xml")
 				{
-					url = url.substring(5, url.length);	
+					if(_selectPath == null)
+						url = url.substring(5, url.length);	
 					_spriteName.push(url);
 				}
 			}
@@ -111,16 +126,9 @@ package
 			var filename:String = decodeURIComponent(loaderInfo.url);
 			var extension:Array = filename.split('/');
 			
-			switch(extension[2])
-			{
-				case "SpriteSheet":
-					_spriteSheetDictionary[extension[3]] =e.target.content as Bitmap;
-					break;
-				case "Component":
-					_componentDictionary[extension[3]] =e.target.content as Bitmap;
-					break;
-			}
 			
+			_spriteSheetDictionary[extension[extension.length-1]] =e.target.content as Bitmap;
+		
 			chedckedImage();
 		}
 		
@@ -134,7 +142,7 @@ package
 
 			_loaderXML.removeEventListener(Event.COMPLETE, onLoadXMLComplete);
 			var extension:Array = _spriteName[0].split('/');
-			_xmlDictionary[extension[2]] = XML(e.currentTarget.data);
+			_xmlDictionary[extension[extension.length-1]] = XML(e.currentTarget.data);
 			_spriteName.removeAt(0);
 			//_xmlVector.push(XML(e.currentTarget.data));
 			chedckedImage();
@@ -168,11 +176,6 @@ package
 		public function getSpriteSheetDictionary() : Dictionary
 		{
 			return _spriteSheetDictionary;
-		}
-		
-		public function getComponentDictionary() : Dictionary
-		{
-			return _componentDictionary;
 		}
 		
 		public function getxmlDictionary() :  Dictionary
