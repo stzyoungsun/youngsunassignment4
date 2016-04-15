@@ -22,7 +22,6 @@ package Animaiton
 			
 			_timer.addEventListener(TimerEvent.TIMER, timerActive);           //타이머가 진행 하는 함수
 			_timer.addEventListener(TimerEvent.TIMER_COMPLETE, timerComplete); //타이머가 끝났을떄
-			_timer.start();
 			
 			 function timerActive():void
 			{

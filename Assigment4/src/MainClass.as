@@ -14,6 +14,7 @@ package
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
 	import Animaiton.Atlastexture;
+	import Window.ImageWindow;
 	
 	/**
 	 * 
@@ -23,7 +24,8 @@ package
 	public class MainClass extends Sprite
 	{
 		private var _cLoader : LoaderClass;
-		private var _cAnimation : AnimationWindow;
+		private var _cAnimationWindow : AnimationWindow;
+		private var _cImageWindow : ImageWindow;
 		private var _componentAtlas : Atlastexture; 
 		
 		private var _radioButton : Vector.<RadioButtonClass> = new Vector.<RadioButtonClass>;    //라디오 버튼은  Animation/Image Window를 조절 하는 버튼 이므로 Main에 삽입
@@ -43,9 +45,10 @@ package
 		private function completeLoadImage() : void
 		{
 			_componentAtlas = new Atlastexture(Texture.fromBitmap(_cLoader.getSpriteSheetDictionary()["Component_Sheet0.png"]),_cLoader.getxmlDictionary()["Component_Sheet0.xml"]);
-			_cAnimation = new AnimationWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet());
-			addChild(_cAnimation);
-			
+			_cAnimationWindow = new AnimationWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet());
+			_cImageWindow = new ImageWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet());
+			addChild(_cAnimationWindow);
+			addChild(_cImageWindow);
 			drawRadioButton();
 		}
 		/**
@@ -82,14 +85,16 @@ package
 					trace("0번 라디오 찍힘");
 					_radioButton[0].swtichClicked(true);
 					_radioButton[1].swtichClicked(false);
-					_cAnimation.visible = true;
+					_cAnimationWindow.visible = true;
+					_cImageWindow.visible = false;
 				}
 				else if(e.currentTarget == _radioButton[1].getRadioButton())
 				{
 					trace("1번 라디오 찍힘");
 					_radioButton[0].swtichClicked(false);
 					_radioButton[1].swtichClicked(true);
-					_cAnimation.visible = false;
+					_cAnimationWindow.visible = false;
+					_cImageWindow.visible = true;
 				}
 				else
 					return;

@@ -40,7 +40,7 @@ package Window
 		
 		private var _fileStream:FileStream = new FileStream(); 
 		private var _loadFile:File = new File(); 
-		var _cClip : AnimaitonClip;
+		private var _cClip : AnimaitonClip;
 		
 		private var _viewButtonCnt : int = 0;
 		private var _drawFirst : Boolean = false;
@@ -82,8 +82,6 @@ package Window
 			_prevButton = new ButtonClass(new Rectangle(_windowRect.x+40, _vewImage.height+30, prevImage.width, prevImage.height),prevImage);
 			
 			_buttonList = new ButtonListClass(new Rectangle(_windowRect.x-30, _vewImage.height+55, loadImage.width+130, loadImage.height*2+100),buttonListImage,drawSprite);
-			
-			
 			
 			
 			addChild(_vewImage);
@@ -236,7 +234,11 @@ package Window
 			
 			addChild(_cClip);
 		}
-		
+		/**
+		 * 
+		 * @param _textures 쪼개진 Sheet 이미지 들
+		 * @Clip에 texture를 타이머에따라 변경
+		 */		
 		private function drawAnimation(_textures : Texture) : void
 		{
 			_cClip.texture = _textures;
