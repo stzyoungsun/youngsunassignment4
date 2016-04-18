@@ -39,7 +39,9 @@ package
 		
 		public function initialize() : void
 		{
+			
 			_cLoader = new LoaderClass(completeLoadImage);
+			
 		}
 		/**
 		 *Note @유영선 이미지 로딩 완료 후 AnimationWindow 창 로드  
@@ -48,15 +50,19 @@ package
 		private function completeLoadImage() : void
 		{
 			
-			
 			_componentAtlas = new Atlastexture(Texture.fromBitmap(_cLoader.getSpriteSheetDictionary()["Component_Sheet0.png"]),_cLoader.getxmlDictionary()["Component_Sheet0.xml"]);
+			initWindow();
+		}
+		
+		private function initWindow() : void 
+		{
 			_cAnimationWindow = new AnimationWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet(),drawRadioButton);
 			
 			var loadImage : Image = new Image(_componentAtlas.getsubSpriteSheet()["LoadSprite.png"]);
 			
 			_backButton = new ButtonClass(new Rectangle(345,390, loadImage.width/2, loadImage.height),loadImage,"Back");
 			_backButton.getButton().addEventListener(TouchEvent.TOUCH,onBackClick);
-				
+			
 			addChild(_backButton.getButton());
 			addChild(_cAnimationWindow);
 		}
@@ -117,7 +123,11 @@ package
 					return;
 			}
 		}
-		
+		/**
+		 * 
+		 * @param e
+		 * back 버튼 클릭 시 window 창들 삭제 후 재 생성
+		 */		
 		private function onBackClick(e:TouchEvent): void
 		{
 			var touch:Touch = e.getTouch(stage,TouchPhase.BEGAN);
@@ -131,15 +141,14 @@ package
 						_radioButton[i].release();
 					}
 				}
-				
 				_backButton.clickedONMotion();
 				if(_cAnimationWindow)
 					_cAnimationWindow.release();
 				if(_cImageWindow)
 					_cImageWindow.release();
-				//_backButton.release();
+				_backButton.release();
 				
-				completeLoadImage();
+				initWindow();
 			}
 			else
 				_backButton.clickedOFFMotion();
