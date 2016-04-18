@@ -107,5 +107,20 @@ package
 					return;
 			}
 		}
+		
+		public function release() : void 
+		{
+			// TODD @유영선 해제 필요 하면 여기다 추가
+			trace("메인 클래스 해제");
+			for(var i: int =0; i < _radioButton.length; i++)
+			{
+				_radioButton[i].release();
+			}
+			_cAnimationWindow.release();
+			_cImageWindow.release();
+			
+			this.removeChildren();
+			this.removeEventListeners();
+		}
 	}
 }

@@ -61,5 +61,14 @@ package Component
 			// 버튼 객체의 자식으로 등록
 			_button.addChild(textField);
 		}
+		
+		public function release() : void
+		{
+			// TODD @유영선 해제 필요 하면 여기다 추가
+			trace("버튼 클래스 해제");
+			_button.removeChildren();
+			_button.removeEventListeners();
+			
+		}
 	}
 }

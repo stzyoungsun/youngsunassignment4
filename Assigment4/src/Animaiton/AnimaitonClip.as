@@ -42,8 +42,11 @@ package Animaiton
 		}
 		public function release() : void
 		{
+			// TODD @유영선 해제 필요 하면 여기다 추가
+			trace("애니매이션 클릭 해제");
+			_timer.stop();
 			
-			
+			dispose();
 		}
 		public function getTimer() : Timer
 		{

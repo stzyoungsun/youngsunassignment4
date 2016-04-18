@@ -68,6 +68,10 @@ package Animaiton
 			return _subTextureNames;
 		}
 	
-		
+		public function release() : void
+		{
+			// TODD @유영선 해제 필요 하면 여기다 추가
+			trace("아트라스 텍스터 해제");
+		}
 	}
 }

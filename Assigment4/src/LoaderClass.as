@@ -184,5 +184,12 @@ package
 		{
 			return _spriteName;
 		}
+		
+		public function release() : void
+		{
+			// TODD @유영선 해제 필요 하면 여기다 추가
+			trace("로더 클래스 해제");
+			_loaderXML.removeEventListener(Event.COMPLETE,onLoadXMLComplete);
+		}
 	}
 }

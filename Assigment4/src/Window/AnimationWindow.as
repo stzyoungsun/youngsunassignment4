@@ -31,7 +31,6 @@ package Window
 		
 		private var _startButton : ButtonClass;
 		private var _stopButton : ButtonClass;
-		private var _pauseButton : ButtonClass;
 		private var _loadSpriteButton : ButtonClass;
 		private var _buttonList : ButtonListClass;
 		private var _nextButton : ButtonClass;
@@ -45,6 +44,17 @@ package Window
 		private var _createImagewindow : Function;
 		private var _viewButtonCnt : int = 0;
 		private var _drawFirst : Boolean = false;
+		
+		/**
+		 * 
+		 * @param posx 윈도우 x 값
+		 * @param posy 윈도우 y 값
+		 * @param width 윈도우 가로
+		 * @param height 윈도우 세로
+		 * @param componentDictionary 로드된 컴포넌트 이미지 들
+		 * @param createImagewindow 스프라이트 시트 후 라디오 버튼, 이미지 윈도우를 생성하기 위한 함수
+		 * 
+		 */		
 		public function AnimationWindow(posx:int, posy:int, width:int, height:int, componentDictionary :Dictionary, createImagewindow : Function)
 		{
 			_windowRect = new Rectangle(posx, posy, width, height);
@@ -77,13 +87,11 @@ package Window
 			
 			_startButton = new ButtonClass(new Rectangle(_windowRect.width/2+150, _vewImage.height+30, startImage.width, startImage.height),startImage);
 			_stopButton = new ButtonClass(new Rectangle(_windowRect.width/2+220, _vewImage.height+30, stopImage.width, stopImage.height),stopImage);
-			_pauseButton = new ButtonClass(new Rectangle(_windowRect.width/2+150, _vewImage.height+30, pauseImage.width, pauseImage.height),pauseImage);
 			_loadSpriteButton = new ButtonClass(new Rectangle(_windowRect.x+40, _vewImage.height+35, loadImage.width, loadImage.height),loadImage,"LoadDic SpriteSheets");
 			_nextButton = new ButtonClass(new Rectangle(_windowRect.x+190, _vewImage.height+30, nextImage.width, nextImage.height),nextImage);
 			_prevButton = new ButtonClass(new Rectangle(_windowRect.x+40, _vewImage.height+30, prevImage.width, prevImage.height),prevImage);
 			
 			_buttonList = new ButtonListClass(new Rectangle(_windowRect.x-30, _vewImage.height+55, loadImage.width+130, loadImage.height*2+100),buttonListImage,drawSprite);
-			
 			
 			addChild(_vewImage);
 			addChild(_startButton.getButton());
@@ -94,7 +102,6 @@ package Window
 			_nextButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_prevButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_startButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
-			_pauseButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_stopButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 		}
 		/**
@@ -172,7 +179,6 @@ package Window
 			addChild(_nextButton.getButton());
 			addChild(_prevButton.getButton());
 			
-			
 			addSheetButton();
 		}
 		/**
@@ -237,8 +243,7 @@ package Window
 			else
 			{
 				removeChild(_cClip);
-				_cClip.getTimer().stop();
-				_cClip.dispose();
+				_cClip.release();
 			}
 				
 			_cClip= new AnimaitonClip(subTexture.getsubVector(),5,drawAnimation);
@@ -261,6 +266,25 @@ package Window
 		public function getButtonlist() : ButtonListClass
 		{
 			return _buttonList;
+		}
+		
+		public function release() : void
+		{
+			// TODD @유영선 해제 필요 하면 여기다 추가
+			trace("애니매이션 윈도우 해제");
+			_cClip.release();
+			_startButton.release();
+			_stopButton.release();
+			_loadSpriteButton.release();
+			_buttonList.release();
+			_nextButton.release();
+			_prevButton.release();
+			
+			_fileStream.close();
+			_loadFile.removeEventListener(flash.events.Event.SELECT,onSelectHandler);
+				
+			this.removeChildren();
+			this.removeEventListeners();
 		}
 	}
 		

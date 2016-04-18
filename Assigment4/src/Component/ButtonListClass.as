@@ -73,5 +73,13 @@ package Component
 				_drawSprite(button.name);
 			}
 		}
+		
+		public function release() : void
+		{
+			// TODD @유영선 해제 필요 하면 여기다 추가
+			trace("버튼 리스트 클래스 해제");
+			_buttonList.removeChildren();
+			_buttonList.removeEventListeners();
+		}
 	}
 }
