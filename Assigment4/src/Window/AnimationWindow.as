@@ -116,27 +116,51 @@ package Window
 				switch(e.currentTarget)
 				{
 					case _loadSpriteButton.getButton():
+						_loadSpriteButton.clickedONMotion();
 						CreateAnimation();
 						break;
-					
 					case _nextButton.getButton():  //다음 리스트를 보여주기 위한 부분
+						_nextButton.clickedONMotion()
 						_viewButtonCnt+=3;
 						if(_viewButtonCnt >= _cSpriteLoader.getspriteName().length)
 							_viewButtonCnt -= 3;
 						viewListButton();
 						break;
-					
 					case _prevButton.getButton():  //이전 리스트를 보여주기 위한 부분
+						_prevButton.clickedONMotion()
 						_viewButtonCnt-=3;
 						if(_viewButtonCnt < 0)
 							_viewButtonCnt = 0;
 						viewListButton();
 						break;
 					case _startButton.getButton():
+						_startButton.clickedONMotion();
 						_cClip.getTimer().start();
 						break;
 					case _stopButton.getButton():
+						_stopButton.clickedONMotion();
 						_cClip.getTimer().stop();
+						break;
+				}
+			}
+			else
+			{
+				switch(e.currentTarget)
+				{
+					case _loadSpriteButton.getButton():
+						_loadSpriteButton.clickedOFFMotion();
+						break;
+					case _nextButton.getButton():  //다음 리스트를 보여주기 위한 부분
+						_nextButton.clickedOFFMotion();
+						break;
+					case _prevButton.getButton():  //이전 리스트를 보여주기 위한 부분
+						_prevButton.clickedOFFMotion();
+						break;
+					case _startButton.getButton():
+						_startButton.clickedOFFMotion();
+						break;
+					case _stopButton.getButton():
+						_stopButton.clickedOFFMotion();
 						break;
 				}
 			}
