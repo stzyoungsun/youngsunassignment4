@@ -41,6 +41,17 @@ package Window
 		
 		private var _curImage : Image;
 		private var _viewButtonCnt : int = 0;
+		/**
+		 * 
+		 * @param posx 윈도우 위치
+		 * @param posy 윈도우 위치
+		 * @param width 윈도우 크기
+		 * @param height 윈도우 크기
+		 * @param componentDictionary 컴포넌트 이미지
+		 * @param curTexture Animation윈도우에서 클릭 한 이미지의 Texture
+		 * @param curBitmap Animation윈도우에서 클릭 한 이미지의 Bitmap
+		 * 
+		 */		
 		public function ImageWindow(posx:int, posy:int, width:int, height:int, componentDictionary :Dictionary
 									,curTexture : Atlastexture ,curBitmap : AtlasBitmap)
 		{

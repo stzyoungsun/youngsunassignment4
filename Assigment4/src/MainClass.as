@@ -79,8 +79,8 @@ package
 			var RadioOFFImageI:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioOFF.png"]);
 			var RadioONImageI:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioON.png"]);
 			
-			_radioButton[0] = new RadioButtonClass(new Rectangle(345, 490, 200, 150), RadioONImageA,RadioOFFImageA,"Animation Mode");
-			_radioButton[1] = new RadioButtonClass(new Rectangle(345, 530,200, 150), RadioONImageI,RadioOFFImageI,"Image Mode");	
+			_radioButton[0] = new RadioButtonClass(new Rectangle(345, 500, 200, 150), RadioONImageA,RadioOFFImageA,"Animation Mode");
+			_radioButton[1] = new RadioButtonClass(new Rectangle(345, 540,200, 150), RadioONImageI,RadioOFFImageI,"Image Mode");	
 			_radioButton[1].swtichClicked(false);
 			
 			_radioButton[0].getRadioButton().addEventListener(TouchEvent.TOUCH,onRadioClick);
