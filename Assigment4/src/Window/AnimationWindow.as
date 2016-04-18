@@ -217,24 +217,36 @@ package Window
 				_buttonList.getButton()[j].visible = true;
 			}
 		}
-		
+		/**
+		 * 
+		 * @param spriteName 선택 된 Sprtie의 Subtexture의 이름
+		 * 리스트 버튼 클릭 시 Srptie 이미지 출력
+		 */		
 		private function drawSprite(spriteName : String) : void
 		{
-			trace(spriteName);
-			if(_drawFirst == false)
-				_drawFirst = true;
-			else
-				removeChild(_cClip);
-			
 			var spritexml : String = spriteName.replace("png","xml");
 			var spriteImage : Image = new Image(Texture.fromBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName]));
 			var subTexture : Atlastexture = new Atlastexture(Texture.fromBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName]),_cSpriteLoader.getxmlDictionary()[spritexml]);
+			
+			trace(spriteName);
+			if(_drawFirst == false)
+			{
+				_drawFirst = true;
+				_createImagewindow(subTexture);
+			}
+			else
+			{
+				removeChild(_cClip);
+				_cClip.getTimer().stop();
+				_cClip.dispose();
+			}
+				
 			_cClip= new AnimaitonClip(subTexture.getsubVector(),5,drawAnimation);
 			_cClip.x = 30;
 			_cClip.y = 100;
 			
 			addChild(_cClip);
-			_createImagewindow(subTexture);
+		
 		}
 		/**
 		 * 

@@ -40,7 +40,11 @@ package Animaiton
 				
 			}
 		}
-		
+		public function release() : void
+		{
+			
+			
+		}
 		public function getTimer() : Timer
 		{
 			return _timer;
