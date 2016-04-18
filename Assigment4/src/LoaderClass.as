@@ -133,8 +133,8 @@ package
 			var extension:Array = filename.split('/');
 			
 			_spriteName.push(extension[extension.length-1]);
-			_spriteSheetDictionary[extension[extension.length-1]] =e.target.content as Bitmap;
-		
+			_spriteSheetDictionary[extension[extension.length-1]] = e.target.content as Bitmap;
+			
 			chedckedImage();
 		}
 		

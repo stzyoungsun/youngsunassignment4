@@ -155,16 +155,18 @@ package Window
 						break;
 					case _startButton.getButton():
 						_startButton.clickedONMotion();
+						_fpsTextField.text = "fps : " + _fpsCount as String;
 						_cClip.getTimer().start();
 						
 						break;
 					case _stopButton.getButton():
 						_stopButton.clickedONMotion();
+						_fpsTextField.text = "fps : 0";
 						_cClip.getTimer().stop();
 						break;
 					case _fastButton.getButton():
 						_fastButton.clickedONMotion();
-						if(_fpsCount > 60)
+						if(_fpsCount >= 60)
 							_fpsCount = 60;
 						else
 							_fpsCount++;
@@ -173,8 +175,8 @@ package Window
 						break;
 					case _slowButton.getButton():
 						_slowButton.clickedONMotion();
-						if(_fpsCount < 0)
-							_fpsCount = 0;
+						if(_fpsCount <= 1)
+							_fpsCount = 1;
 						else
 							_fpsCount--;
 						_fpsTextField.text = "fps : " + _fpsCount as String;
