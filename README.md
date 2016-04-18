@@ -5,7 +5,7 @@
 
 [youngsun wiki로 바로가기](https://github.com/stzyoungsun/youngsunassignment4/wiki)
 
-사용법
+###사용법
 
 ![1] (http://i.imgur.com/OZgceXV.png)
 
