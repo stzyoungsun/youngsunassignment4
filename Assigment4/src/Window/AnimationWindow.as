@@ -91,6 +91,9 @@ package Window
 			
 			_buttonList = new ButtonListClass(new Rectangle(_windowRect.x-30, _vewImage.height+55, loadImage.width+130, loadImage.height*2+100),buttonListImage,drawSprite);
 			
+			_startButton.getButton().visible = false;
+			_stopButton.getButton().visible = false;
+			
 			addChild(_vewImage);
 			addChild(_startButton.getButton());
 			addChild(_stopButton.getButton());
@@ -260,6 +263,8 @@ package Window
 			if(_drawFirst == false)
 			{
 				_drawFirst = true;
+				_startButton.getButton().visible = true;
+				_stopButton.getButton().visible = true;
 				_createImagewindow(subTexture);
 			}
 			else
