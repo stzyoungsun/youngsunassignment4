@@ -3,11 +3,13 @@
 <SubTexture name="Window.png" x="0" y="0" width="512" height="256 "/>
 <SubTexture name="List.png" x="0" y="256" width="256" height="256 "/>
 <SubTexture name="LoadSprite.png" x="256" y="256" width="200" height="55 "/>
-<SubTexture name="Next.png" x="456" y="256" width="32" height="32 "/>
-<SubTexture name="Stop.png" x="256" y="311" width="64" height="64 "/>
-<SubTexture name="Pause.png" x="256" y="375" width="64" height="64 "/>
-<SubTexture name="Start.png" x="256" y="439" width="64" height="64 "/>
+<SubTexture name="RadioON.png" x="456" y="256" width="32" height="32 "/>
+<SubTexture name="fast.png" x="456" y="288" width="32" height="21 "/>
+<SubTexture name="Start.png" x="256" y="311" width="64" height="64 "/>
+<SubTexture name="Stop.png" x="256" y="375" width="64" height="64 "/>
+<SubTexture name="Pause.png" x="256" y="439" width="64" height="64 "/>
 <SubTexture name="Prev.png" x="320" y="311" width="32" height="32 "/>
 <SubTexture name="RadioOFF.png" x="352" y="311" width="32" height="32 "/>
-<SubTexture name="RadioON.png" x="384" y="311" width="32" height="32 "/>
+<SubTexture name="Next.png" x="384" y="311" width="32" height="32 "/>
+<SubTexture name="down.png" x="416" y="311" width="32" height="21 "/>
 </TextureAtlas>

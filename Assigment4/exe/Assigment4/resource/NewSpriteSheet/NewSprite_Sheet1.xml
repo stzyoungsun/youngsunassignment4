@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas ImagePath="sprite_sheet[1].png">
+<SubTexture name="fish.png" x="0" y="0" width="150" height="84 "/>
+<SubTexture name="fish2.png" x="0" y="84" width="150" height="95 "/>
+</TextureAtlas>
