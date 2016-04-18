@@ -6,12 +6,13 @@ package MakeSheet
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
-	import Animaiton.Atlastexture;
+	
+	import Animaiton.AtlasBitmap;
 	
 	
 	public class MakeSpriteSheet
 	{	
-		private var _pieceImage : Atlastexture;
+		private var _pieceImage : AtlasBitmap;
 		
 		private var _cBinaryTree : BinaryTree;
 		private var _cIDBitmap : IDBitmap;
@@ -28,7 +29,7 @@ package MakeSheet
 		private var _imagePos : Point = new Point(0,0);
 		private var _pieceBitmap : Vector.<IDBitmap> = new Vector.<IDBitmap>;
 		
-		public function MakeSpriteSheet(pieceImage : Atlastexture)
+		public function MakeSpriteSheet(pieceImage : AtlasBitmap)
 		{
 			_pieceImage = pieceImage;
 			sortImage();
@@ -42,9 +43,13 @@ package MakeSheet
 		{
 			var imageTemp : Vector.<Bitmap> = new Vector.<Bitmap>;
 			
-			for(var i : int=0; i<LoaderImage.sImageMaxCount; i++)
+			for(var i : int=0; i<_pieceImage.getsubBitmapName().length; i++)
 			{
-				_cIDBitmap = new IDBitmap(_pieceImage[LoaderImage.sFileNameVecotr[i]],LoaderImage.sFileNameVecotr[i]);
+				_pieceImage.getsubSpriteSheet()[_pieceImage.getsubBitmapName()[i]]
+					
+				_cIDBitmap = new IDBitmap(_pieceImage.getsubSpriteSheet()[_pieceImage.getsubBitmapName()[i]]
+					,_pieceImage.getsubBitmapName()[i]);
+				
 				_pieceBitmap[i] = _cIDBitmap;
 			}
 			_pieceBitmap.sort(orderAbs);
@@ -106,7 +111,7 @@ package MakeSheet
 				trace("ImageName : "+_cBinaryTree.getNameArray()[j]);
 				trace("Image x: "+_cBinaryTree.getRectVetor()[j].x);
 				trace("Image y : "+_cBinaryTree.getRectVetor()[j].y);
-				_bitmap = _pieceImage[_cBinaryTree.getNameArray()[j]];
+				_bitmap = _pieceImage.getsubSpriteSheet()[_cBinaryTree.getNameArray()[j]];
 				
 				imageMatrix.translate(_cBinaryTree.getRectVetor()[j].x,_cBinaryTree.getRectVetor()[j].y);
 				_spriteSheet.draw(_bitmap,imageMatrix);

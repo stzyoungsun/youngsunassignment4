@@ -5,10 +5,13 @@ package Window
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
+	import Animaiton.AtlasBitmap;
 	import Animaiton.Atlastexture;
 	
 	import Component.ButtonClass;
 	import Component.ButtonListClass;
+	
+	import MakeSheet.MakeSpriteSheet;
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -17,6 +20,7 @@ package Window
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
+
 	public class ImageWindow extends Sprite
 	{
 		private var _cAddImageLoader: LoaderClass;
@@ -25,6 +29,7 @@ package Window
 		
 		private var _componentDictionary: Dictionary;	//컴포넌트 이미지
 		private var _curTexture : Atlastexture; 	//사용자가 로드한 SprtieSheet 안에 의미지
+		private var _curBitmap : AtlasBitmap;
 		private var _windowRect : Rectangle;
 		private var _vewImage : Image;
 		
@@ -32,14 +37,17 @@ package Window
 		private var _prevButton : ButtonClass;
 		private var _addButton : ButtonClass;
 		private var _buttonList : ButtonListClass;
+		private var _makeSheet : ButtonClass;		//추가된 이미지를 이용하여 Sprtie Sheet를 재 생성
 		
 		private var _curImage : Image;
 		private var _viewButtonCnt : int = 0;
-		public function ImageWindow(posx:int, posy:int, width:int, height:int, componentDictionary :Dictionary,curTexture : Atlastexture )
+		public function ImageWindow(posx:int, posy:int, width:int, height:int, componentDictionary :Dictionary
+									,curTexture : Atlastexture ,curBitmap : AtlasBitmap)
 		{
 			_windowRect = new Rectangle(posx, posy, width, height);
 			_componentDictionary = componentDictionary;
 			_curTexture = curTexture;
+			_curBitmap = curBitmap;
 			addEventListener(starling.events.Event.ADDED_TO_STAGE, onDrawWindow);
 		}
 		
@@ -51,6 +59,7 @@ package Window
 			var prevImage:Image = new Image(_componentDictionary["Prev.png"]);
 			var addImage : Image = new Image(_componentDictionary["LoadSprite.png"]);
 			_buttonListImage = new Image(_componentDictionary["List.png"]);
+			var makeButtonImage : Image  = new Image(_componentDictionary["LoadSprite.png"]);
 			
 			_vewImage.x = _windowRect.x;
 			_vewImage.y = _windowRect.y;
@@ -60,11 +69,14 @@ package Window
 			_nextButton = new ButtonClass(new Rectangle(_windowRect.x+190, _vewImage.height+30, nextImage.width, nextImage.height),nextImage);
 			_prevButton = new ButtonClass(new Rectangle(_windowRect.x+40, _vewImage.height+30, prevImage.width, prevImage.height),prevImage);
 			_addButton = new ButtonClass(new Rectangle(460, 390, addImage.width/2, addImage.height),addImage, "이미지 추가");
+			_makeSheet = new ButtonClass(new Rectangle(345, 450, addImage.width*2, addImage.height/2),makeButtonImage, "Remake Sprite Sheet");
+			_makeSheet.getButton().visible = false;
 			
 			addChild(_vewImage);
 			addChild(_addButton.getButton());
 			addChild(_nextButton.getButton());
 			addChild(_prevButton.getButton());
+			addChild(_makeSheet.getButton());
 			
 			_nextButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_prevButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
@@ -92,23 +104,25 @@ package Window
 							_viewButtonCnt -= 3;
 						viewListButton();
 						break;
-					
 					case _prevButton.getButton():  //이전 리스트를 보여주기 위한 부분
 						_viewButtonCnt-=3;
 						if(_viewButtonCnt < 0)
 							_viewButtonCnt = 0;
 						viewListButton();
 						break;
-					
 					case _addButton.getButton():
 						addImage();
+						break;
+					case _makeSheet.getButton():
+						var cMakeSpriteSheet : MakeSpriteSheet = new MakeSpriteSheet(_curBitmap);
+						cMakeSpriteSheet.getSheet();
 						break;
 				}
 			}
 		}
 		/**
 		 * Note #유영선 이미지 추가 기능 함수 
-		 * browseForOpenMultiple 추가 할 이미지 다중 선택 가능
+		 * 추가 할 이미지들이 있는 폴더 선택
 		 */		
 		private function addImage() : void
 		{
@@ -118,6 +132,8 @@ package Window
 			
 			function onDicSelected(e:flash.events.Event):void
 			{
+				_makeSheet.getButton().visible = true;
+				_makeSheet.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 				_cAddImageLoader = new LoaderClass(addImageToList,file.nativePath,false);	
 			}
 		}
@@ -132,6 +148,7 @@ package Window
 			{
 				var newTexture : Texture = Texture.fromBitmap(_cAddImageLoader.getSpriteSheetDictionary()[_cAddImageLoader.getspriteName()[i]]);
 				_curTexture.addSubTexure(newTexture,_cAddImageLoader.getspriteName()[i]);
+				_curBitmap.addSubBitmap(_cAddImageLoader.getSpriteSheetDictionary()[_cAddImageLoader.getspriteName()[i]],_cAddImageLoader.getspriteName()[i]);
 			}
 				
 			_buttonList.release();

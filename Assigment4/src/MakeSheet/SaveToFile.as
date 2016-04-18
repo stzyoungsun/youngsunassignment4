@@ -49,8 +49,8 @@ package MakeSheet
 			
 			for(var i : int =0; i < _spriteSheetBitmap.length; i++)
 			{
-				_bitmapByteArray = PNGEncoder.encode(_spriteSheetBitmap[i].bitmapData);
-				_saveFile.nativePath += "\\Sprite_Sheet["+i+"].png";
+				_bitmapByteArray = PNGEN.encode(_spriteSheetBitmap[i].bitmapData);
+				_saveFile.nativePath += "\\NewSprite_Sheet"+i+".png";
 				_fileStream.open(_saveFile, FileMode.WRITE);
 				_fileStream.writeBytes(_bitmapByteArray);
 				_saveFile.nativePath = tempPath;
@@ -59,7 +59,7 @@ package MakeSheet
 			
 			for(var j : int = 0; j< _spriteSheetName.length; j++)
 			{
-				_saveFile.nativePath += "\\Sprite_Sheet["+j+"].xml";
+				_saveFile.nativePath += "\\NewSprite_Sheet"+j+".xml";
 				_fileStream.open(_saveFile, FileMode.WRITE);
 				_fileStream.writeUTFBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 				_fileStream.writeUTFBytes("<TextureAtlas ImagePath=\"" + "sprite_sheet["+j+"].png" + "\">\n");

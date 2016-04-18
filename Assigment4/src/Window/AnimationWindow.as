@@ -20,6 +20,7 @@ package Window
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
+	import Animaiton.AtlasBitmap;
 	
 	public class AnimationWindow extends Sprite
 	{
@@ -257,6 +258,7 @@ package Window
 			var spritexml : String = spriteName.replace("png","xml");
 			var spriteImage : Image = new Image(Texture.fromBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName]));
 			var subTexture : Atlastexture = new Atlastexture(Texture.fromBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName]),_cSpriteLoader.getxmlDictionary()[spritexml]);
+			var subBitmap : AtlasBitmap = new AtlasBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName],_cSpriteLoader.getxmlDictionary()[spritexml]);
 			
 			trace(spriteName);
 			if(_cClip)
@@ -265,13 +267,13 @@ package Window
 				_cClip.release();
 				_startButton.getButton().visible = true;
 				_stopButton.getButton().visible = true;
-				_createImagewindow(subTexture);
+				_createImagewindow(subTexture,subBitmap);
 			}
 			else
 			{
 				_startButton.getButton().visible = true;
 				_stopButton.getButton().visible = true;
-				_createImagewindow(subTexture);
+				_createImagewindow(subTexture, subBitmap);
 			}
 				
 			_cClip= new AnimaitonClip(subTexture.getsubVector(),5,drawAnimation);
