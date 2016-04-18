@@ -18,7 +18,7 @@ package Animaiton
 		{
 			super(textures[0]);
 			_textures = textures;
-			_timer = new Timer(fps*100,0);
+			_timer = new Timer(1000/fps,0);
 			
 			_timer.addEventListener(TimerEvent.TIMER, timerActive);           //타이머가 진행 하는 함수
 			_timer.addEventListener(TimerEvent.TIMER_COMPLETE, timerComplete); //타이머가 끝났을떄

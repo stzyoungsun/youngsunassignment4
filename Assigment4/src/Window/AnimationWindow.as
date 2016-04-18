@@ -3,11 +3,11 @@ package Window
 
 	import flash.events.Event;
 	import flash.filesystem.File;
-
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
 	import Animaiton.AnimaitonClip;
+	import Animaiton.AtlasBitmap;
 	import Animaiton.Atlastexture;
 	
 	import Component.ButtonClass;
@@ -19,8 +19,8 @@ package Window
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import starling.text.TextField;
 	import starling.textures.Texture;
-	import Animaiton.AtlasBitmap;
 	
 	public class AnimationWindow extends Sprite
 	{
@@ -36,6 +36,8 @@ package Window
 		private var _buttonList : ButtonListClass;
 		private var _nextButton : ButtonClass;
 		private var _prevButton : ButtonClass;
+		private var _fastButton : ButtonClass;
+		private var _slowButton : ButtonClass;
 		private var _vewImage : Image;
 		
 		private var _loadFile:File = new File(); 
@@ -44,6 +46,8 @@ package Window
 		private var _createImagewindow : Function;
 		private var _viewButtonCnt : int = 0;
 		
+		private var _fpsTextField : TextField = new TextField(100,20,"fps : 0");
+		private var _fpsCount : int =30;
 		/**
 		 * 
 		 * @param posx 윈도우 x 값
@@ -77,6 +81,8 @@ package Window
 			var prevImage:Image = new Image(_componentDictionary["Prev.png"]);
 			var loadImage : Image = new Image(_componentDictionary["LoadSprite.png"]);
 			var buttonListImage : Image = new Image(_componentDictionary["List.png"]);
+			var fastImage:Image = new Image(_componentDictionary["fast.png"]);
+			var slowImage:Image = new Image(_componentDictionary["down.png"]);
 			
 			_vewImage.x = _windowRect.x;
 			_vewImage.y = _windowRect.y;
@@ -88,22 +94,33 @@ package Window
 			_loadSpriteButton = new ButtonClass(new Rectangle(_windowRect.x+40, _vewImage.height+35, loadImage.width, loadImage.height),loadImage,"LoadDic SpriteSheets");
 			_nextButton = new ButtonClass(new Rectangle(_windowRect.x+190, _vewImage.height+30, nextImage.width, nextImage.height),nextImage);
 			_prevButton = new ButtonClass(new Rectangle(_windowRect.x+40, _vewImage.height+30, prevImage.width, prevImage.height),prevImage);
+			_fastButton = new ButtonClass(new Rectangle(415, 455, fastImage.width, fastImage.height),fastImage);
+			_slowButton = new ButtonClass(new Rectangle(345,455, slowImage.width, slowImage.height),slowImage);
 			
 			_buttonList = new ButtonListClass(new Rectangle(_windowRect.x-30, _vewImage.height+55, loadImage.width+130, loadImage.height*2+100),buttonListImage,drawSprite);
 			
 			_startButton.getButton().visible = false;
 			_stopButton.getButton().visible = false;
+			_fastButton.getButton().visible = false;
+			_slowButton.getButton().visible = false;
+			_fpsTextField.x = 20;
+			_fpsTextField.y = 50;
 			
 			addChild(_vewImage);
 			addChild(_startButton.getButton());
 			addChild(_stopButton.getButton());
 			addChild(_loadSpriteButton.getButton());
+			addChild(_fastButton.getButton());
+			addChild(_slowButton.getButton());
+			addChild(_fpsTextField);
 			
 			_loadSpriteButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_nextButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_prevButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_startButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_stopButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
+			_fastButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
+			_slowButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 		}
 		/**
 		 * 
@@ -139,11 +156,31 @@ package Window
 					case _startButton.getButton():
 						_startButton.clickedONMotion();
 						_cClip.getTimer().start();
+						
 						break;
 					case _stopButton.getButton():
 						_stopButton.clickedONMotion();
 						_cClip.getTimer().stop();
 						break;
+					case _fastButton.getButton():
+						_fastButton.clickedONMotion();
+						if(_fpsCount > 60)
+							_fpsCount = 60;
+						else
+							_fpsCount++;
+						_fpsTextField.text = "fps : " + _fpsCount as String;
+						_cClip.getTimer().delay = 1000/_fpsCount;
+						break;
+					case _slowButton.getButton():
+						_slowButton.clickedONMotion();
+						if(_fpsCount < 0)
+							_fpsCount = 0;
+						else
+							_fpsCount--;
+						_fpsTextField.text = "fps : " + _fpsCount as String;
+						_cClip.getTimer().delay = 1000/_fpsCount;	
+						break;
+					
 				}
 			}
 			else
@@ -164,6 +201,13 @@ package Window
 						break;
 					case _stopButton.getButton():
 						_stopButton.clickedOFFMotion();
+						break;
+					case _fastButton.getButton():
+						_fastButton.clickedOFFMotion();
+						
+						break;
+					case _slowButton.getButton():
+						_slowButton.clickedOFFMotion();
 						break;
 				}
 			}
@@ -260,6 +304,9 @@ package Window
 			var subTexture : Atlastexture = new Atlastexture(Texture.fromBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName]),_cSpriteLoader.getxmlDictionary()[spritexml]);
 			var subBitmap : AtlasBitmap = new AtlasBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName],_cSpriteLoader.getxmlDictionary()[spritexml]);
 			
+			_fastButton.getButton().visible = true;
+			_slowButton.getButton().visible = true;
+			
 			trace(spriteName);
 			if(_cClip)
 			{
@@ -276,7 +323,7 @@ package Window
 				_createImagewindow(subTexture, subBitmap);
 			}
 				
-			_cClip= new AnimaitonClip(subTexture.getsubVector(),5,drawAnimation);
+			_cClip= new AnimaitonClip(subTexture.getsubVector(),30,drawAnimation);
 			_cClip.x = 30;
 			_cClip.y = 100;
 			
