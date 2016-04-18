@@ -145,7 +145,7 @@ package
 			var extension:Array = _xmlName[0].split('/');
 			_xmlDictionary[extension[extension.length-1]] = XML(e.currentTarget.data);
 			_xmlName.removeAt(0);
-			//_xmlVector.push(XML(e.currentTarget.data));
+			
 			chedckedImage();
 			
 			if(_xmlName.length != 0)

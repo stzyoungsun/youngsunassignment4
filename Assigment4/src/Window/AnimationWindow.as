@@ -217,7 +217,7 @@ package Window
 			for(var i :int = 0; i < _cSpriteLoader.getspriteName().length; i++)
 			{
 				trace(_cSpriteLoader.getspriteName()[i]);
-				var button :ButtonClass = new ButtonClass(new Rectangle(),new Image(_componentDictionary["LoadSprite.png"]),_cSpriteLoader.getspriteName()[i])
+				var button :ButtonClass = new ButtonClass(new Rectangle(0,0,0,0),new Image(_componentDictionary["LoadSprite.png"]),_cSpriteLoader.getspriteName()[i])
 				_buttonList.addButton(button.getButton(),65,50+buttonPos*40);
 				button.getButton().visible = false;
 				
@@ -278,7 +278,6 @@ package Window
 			_cClip.y = 100;
 			
 			addChild(_cClip);
-		
 		}
 		/**
 		 * 
@@ -287,6 +286,10 @@ package Window
 		 */		
 		private function drawAnimation(_textures : Texture) : void
 		{
+		
+			_cClip.width = _textures.width;
+			_cClip.height = _textures.height;
+	
 			_cClip.texture = _textures;
 		}
 		
@@ -299,15 +302,22 @@ package Window
 		{
 			// TODD @유영선 해제 필요 하면 여기다 추가
 			trace("애니매이션 윈도우 해제");
-			_cClip.release();
-			_startButton.release();
-			_stopButton.release();
-			_loadSpriteButton.release();
-			_buttonList.release();
-			_nextButton.release();
-			_prevButton.release();
-			
-			_loadFile.removeEventListener(flash.events.Event.SELECT,onSelectHandler);
+			if(_cClip)
+				_cClip.release();
+			if(_startButton)
+				_startButton.release();
+			if(_stopButton)
+				_stopButton.release();
+			if(_loadSpriteButton)
+				_loadSpriteButton.release();
+			if(_buttonList)
+				_buttonList.release();
+			if(_nextButton)
+				_nextButton.release();
+			if(_prevButton)
+				_prevButton.release();
+			if(_loadFile)
+				_loadFile.removeEventListener(flash.events.Event.SELECT,onSelectHandler);
 				
 			this.removeChildren();
 			this.removeEventListeners();

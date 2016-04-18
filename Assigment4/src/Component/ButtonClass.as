@@ -56,10 +56,14 @@ package Component
 			
 			_button.x = _buttonRect.x;
 			_button.y = _buttonRect.y;
-			_button.width = _buttonRect.width;
-			_button.height = _buttonRect.height;
+			
+			if(_buttonRect.width != 0)
+				_buttonImage.width = _buttonRect.width;
+			if(_buttonRect.height != 0)
+				_buttonImage.height = _buttonRect.height;
 			
 			_button.addChild(_buttonImage);
+			
 			_button.name = buttonText;
 			trace(_button.name);
 			// TextField 객체 생성

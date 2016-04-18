@@ -159,9 +159,12 @@ package Window
 		{
 			// TODD @유영선 해제 필요 하면 여기다 추가
 			trace("이미지 윈도우 해제");
-			_nextButton.release();
-			_prevButton.release();
-			_buttonList.release();
+			if(_nextButton)
+				_nextButton.release();
+			if(_prevButton)
+				_prevButton.release();
+			if(_buttonList)
+				_buttonList.release();
 			
 			this.removeChildren();
 			this.removeEventListeners();

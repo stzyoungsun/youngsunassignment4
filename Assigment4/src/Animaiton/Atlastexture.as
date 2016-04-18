@@ -44,7 +44,6 @@ package Animaiton
 				region.setTo(x,y,width,height);
 				createSubTexure(name, region);
 			}
-			
 		}
 		
 		public function createSubTexure(name : String, region:Rectangle):void

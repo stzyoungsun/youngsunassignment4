@@ -16,6 +16,7 @@ package
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
+	import Component.ButtonClass;
 	
 	/**
 	 * 
@@ -29,6 +30,7 @@ package
 		private var _cImageWindow : ImageWindow;
 		private var _componentAtlas : Atlastexture; 
 		
+		private var _backButton :ButtonClass;
 		private var _radioButton : Vector.<RadioButtonClass> = new Vector.<RadioButtonClass>;    //라디오 버튼은  Animation/Image Window를 조절 하는 버튼 이므로 Main에 삽입
 		public function MainClass()
 		{
@@ -45,9 +47,17 @@ package
 		 */		
 		private function completeLoadImage() : void
 		{
+			
+			
 			_componentAtlas = new Atlastexture(Texture.fromBitmap(_cLoader.getSpriteSheetDictionary()["Component_Sheet0.png"]),_cLoader.getxmlDictionary()["Component_Sheet0.xml"]);
 			_cAnimationWindow = new AnimationWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet(),drawRadioButton);
 			
+			var loadImage : Image = new Image(_componentAtlas.getsubSpriteSheet()["LoadSprite.png"]);
+			
+			_backButton = new ButtonClass(new Rectangle(345,390, loadImage.width/2, loadImage.height),loadImage,"Back");
+			_backButton.getButton().addEventListener(TouchEvent.TOUCH,onBackClick);
+				
+			addChild(_backButton.getButton());
 			addChild(_cAnimationWindow);
 		}
 		/**
@@ -108,6 +118,32 @@ package
 			}
 		}
 		
+		private function onBackClick(e:TouchEvent): void
+		{
+			var touch:Touch = e.getTouch(stage,TouchPhase.BEGAN);
+			
+			if(touch)
+			{
+				if(_radioButton)
+				{
+					for(var i: int =0; i < _radioButton.length; i++)
+					{
+						_radioButton[i].release();
+					}
+				}
+				
+				_backButton.clickedONMotion();
+				if(_cAnimationWindow)
+					_cAnimationWindow.release();
+				if(_cImageWindow)
+					_cImageWindow.release();
+				//_backButton.release();
+				
+				completeLoadImage();
+			}
+			else
+				_backButton.clickedOFFMotion();
+		}
 		public function release() : void 
 		{
 			// TODD @유영선 해제 필요 하면 여기다 추가
