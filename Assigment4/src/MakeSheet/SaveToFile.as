@@ -1,6 +1,7 @@
 package MakeSheet
 {
 	import flash.display.Bitmap;
+	import flash.display.PNGEncoderOptions;
 	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
@@ -19,7 +20,7 @@ package MakeSheet
 		private var _spriteSheetRect :  Vector.<Vector.<Rectangle>>;
 		private var _spriteSheetName : Vector.<Array>;
 		
-		private var _bitmapByteArray:ByteArray; 
+		
 		
 		public function SaveToFile(bitmap:Vector.<Bitmap>, spriteSheetRect : Vector.<Vector.<Rectangle>>, spriteSheetName : Vector.<Array>)
 		{
@@ -49,8 +50,9 @@ package MakeSheet
 			
 			for(var i : int =0; i < _spriteSheetBitmap.length; i++)
 			{
-				_bitmapByteArray = PNGEN.encode(_spriteSheetBitmap[i].bitmapData);
-				_saveFile.nativePath += "\\NewSprite_Sheet"+i+".png";
+				var _bitmapByteArray:ByteArray = new ByteArray();
+				_spriteSheetBitmap[i].bitmapData.encode(new Rectangle(0,0,_spriteSheetBitmap[i].width,_spriteSheetBitmap[i].height), new PNGEncoderOptions(), _bitmapByteArray);
+				_saveFile.nativePath += "\\Sprite_Sheet["+i+"].png";
 				_fileStream.open(_saveFile, FileMode.WRITE);
 				_fileStream.writeBytes(_bitmapByteArray);
 				_saveFile.nativePath = tempPath;

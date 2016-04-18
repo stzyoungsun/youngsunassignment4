@@ -182,7 +182,6 @@ package Window
 						_fpsTextField.text = "fps : " + _fpsCount as String;
 						_cClip.getTimer().delay = 1000/_fpsCount;	
 						break;
-					
 				}
 			}
 			else
