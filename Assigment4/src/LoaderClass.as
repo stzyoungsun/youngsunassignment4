@@ -30,8 +30,11 @@ package
 		private var _fileDataArray:Array = new Array();			   //파일이 담김 배열
 		private var _loaderXML:URLLoader;
 		private var _completeFunction:Function;
-		public function LoaderClass(completeFunction : Function,directoryPath:String = null)
+		
+		private var _isXml : Boolean; //xml 존재 여부
+		public function LoaderClass(completeFunction : Function,directoryPath:String = null, isXml : Boolean = true)
 		{
+			_isXml = isXml;
 			_selectPath = directoryPath;
 			_completeFunction = completeFunction;
 			resourceLoader();
@@ -46,7 +49,9 @@ package
 				getResource(_selectPath);
 			
 			buildLoader();
-			buildXMLLoader();
+			
+			if(_isXml == true)
+				buildXMLLoader();
 		}
 		
 		/**

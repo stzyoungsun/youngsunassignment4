@@ -53,6 +53,12 @@ package Animaiton
 			_subTextureNames.push(name);
 		}
 		
+		public function addSubTexure(subTexture : Texture, name : String) : void
+		{
+			_subSpriteSheet[name] =  subTexture;
+			_subSheetVector.push(subTexture);
+			_subTextureNames.push(name);
+		}
 		public function getsubSpriteSheet() :Dictionary   //subtecture를  Dictionary로 리턴
 		{
 			return _subSpriteSheet;

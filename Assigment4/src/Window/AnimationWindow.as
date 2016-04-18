@@ -3,7 +3,7 @@ package Window
 
 	import flash.events.Event;
 	import flash.filesystem.File;
-	import flash.filesystem.FileStream;
+
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
@@ -263,6 +263,9 @@ package Window
 			{
 				removeChild(_cClip);
 				_cClip.release();
+				_startButton.getButton().visible = true;
+				_stopButton.getButton().visible = true;
+				_createImagewindow(subTexture);
 			}
 			else
 			{

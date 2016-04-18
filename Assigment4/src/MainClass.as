@@ -87,6 +87,8 @@ package
 			
 			addChild(_radioButton[0].getRadioButton());
 			addChild(_radioButton[1].getRadioButton());
+			if(_cImageWindow)
+				_cImageWindow.release();
 			
 			_cImageWindow = new ImageWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet(),curTexture);
 			_cImageWindow.visible = false;

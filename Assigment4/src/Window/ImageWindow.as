@@ -1,5 +1,7 @@
 package Window
 {
+	import flash.events.Event;
+	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
@@ -14,9 +16,13 @@ package Window
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
-
+	import starling.textures.Texture;
 	public class ImageWindow extends Sprite
 	{
+		private var _cAddImageLoader: LoaderClass;
+		
+		private var _buttonListImage : Image;
+		
 		private var _componentDictionary: Dictionary;	//컴포넌트 이미지
 		private var _curTexture : Atlastexture; 	//사용자가 로드한 SprtieSheet 안에 의미지
 		private var _windowRect : Rectangle;
@@ -28,7 +34,6 @@ package Window
 		private var _buttonList : ButtonListClass;
 		
 		private var _curImage : Image;
-		private var _drawFirst : Boolean = false;
 		private var _viewButtonCnt : int = 0;
 		public function ImageWindow(posx:int, posy:int, width:int, height:int, componentDictionary :Dictionary,curTexture : Atlastexture )
 		{
@@ -42,10 +47,10 @@ package Window
 		{
 			_vewImage = new Image(_componentDictionary["Window.png"]);
 		
-			var buttonListImage : Image = new Image(_componentDictionary["List.png"]);
-			var addImage : Image = new Image(_componentDictionary["LoadSprite.png"]);
 			var nextImage:Image = new Image(_componentDictionary["Next.png"]);
 			var prevImage:Image = new Image(_componentDictionary["Prev.png"]);
+			var addImage : Image = new Image(_componentDictionary["LoadSprite.png"]);
+			_buttonListImage = new Image(_componentDictionary["List.png"]);
 			
 			_vewImage.x = _windowRect.x;
 			_vewImage.y = _windowRect.y;
@@ -63,8 +68,9 @@ package Window
 			
 			_nextButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_prevButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
+			_addButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			
-			addSheetButton(buttonListImage);
+			addSheetButton();
 		}
 		
 		/**
@@ -93,19 +99,58 @@ package Window
 							_viewButtonCnt = 0;
 						viewListButton();
 						break;
+					
+					case _addButton.getButton():
+						addImage();
+						break;
 				}
+			}
+		}
+		/**
+		 * Note #유영선 이미지 추가 기능 함수 
+		 * browseForOpenMultiple 추가 할 이미지 다중 선택 가능
+		 */		
+		private function addImage() : void
+		{
+			var file : File = File.applicationDirectory;
+			file.browseForDirectory("추가 할 이미지들이 있는 폴더를 선택해 주세요");
+			file.addEventListener(flash.events.Event.SELECT,onDicSelected);
+			
+			function onDicSelected(e:flash.events.Event):void
+			{
+				_cAddImageLoader = new LoaderClass(addImageToList,file.nativePath,false);	
 			}
 		}
 		
 		/**
+		 * 
+		 * Note @유영선 메모리에 새로운 이미지 추가
+		 */		
+		private function addImageToList(): void
+		{	
+			for(var i :int = 0; i < _cAddImageLoader.getspriteName().length; i++)
+			{
+				var newTexture : Texture = Texture.fromBitmap(_cAddImageLoader.getSpriteSheetDictionary()[_cAddImageLoader.getspriteName()[i]]);
+				_curTexture.addSubTexure(newTexture,_cAddImageLoader.getspriteName()[i]);
+			}
+				
+			_buttonList.release();
+			
+			_buttonList = null;
+			addSheetButton();
+		}
+		/**
 		 * 버튼 리스트 안에있는 SpriteSheet 개수만큼 등록 
 		 * 
 		 */		
-		private function addSheetButton(buttonListImage : Image) : void
+		private function addSheetButton() : void
 		{
-			_buttonList = new ButtonListClass(new Rectangle(_windowRect.x-30, _vewImage.height+55,350 ,200 ),buttonListImage,drawSprite);
-			addChild(_buttonList.getList());
-			
+			if(!_buttonList)
+			{
+				_buttonList = new ButtonListClass(new Rectangle(_windowRect.x-30, _vewImage.height+55,350 ,200 ),_buttonListImage,drawSprite);
+				addChild(_buttonList.getList());
+			}
+				
 			var buttonPos : int = 0;
 			
 			for(var i :int = 0; i < _curTexture.getsubVector().length; i++)
@@ -149,10 +194,10 @@ package Window
 		{
 			trace (spriteName);
 			
-			if(_drawFirst == false)
-				_drawFirst = true;
-			else
+			if(_curImage)
+			{
 				removeChild(_curImage);
+			}
 			
 			_curImage = new Image(_curTexture.getsubSpriteSheet()[spriteName]);
 			_curImage.x = 30;

@@ -80,6 +80,7 @@ package Component
 			trace("버튼 리스트 클래스 해제");
 			_buttonList.removeChildren();
 			_buttonList.removeEventListeners();
+			_buttonList.dispose();
 		}
 	}
 }
