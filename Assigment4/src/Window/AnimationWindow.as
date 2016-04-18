@@ -37,7 +37,6 @@ package Window
 		private var _prevButton : ButtonClass;
 		private var _vewImage : Image;
 		
-		private var _fileStream:FileStream = new FileStream(); 
 		private var _loadFile:File = new File(); 
 		private var _cClip : AnimaitonClip;
 		
@@ -74,7 +73,6 @@ package Window
 			
 			var startImage:Image = new Image(_componentDictionary["Start.png"]);
 			var stopImage:Image = new Image(_componentDictionary["Stop.png"]);
-			var pauseImage:Image = new Image(_componentDictionary["Pause.png"]);
 			var nextImage:Image = new Image(_componentDictionary["Next.png"]);
 			var prevImage:Image = new Image(_componentDictionary["Prev.png"]);
 			var loadImage : Image = new Image(_componentDictionary["LoadSprite.png"]);
@@ -280,7 +278,6 @@ package Window
 			_nextButton.release();
 			_prevButton.release();
 			
-			_fileStream.close();
 			_loadFile.removeEventListener(flash.events.Event.SELECT,onSelectHandler);
 				
 			this.removeChildren();
