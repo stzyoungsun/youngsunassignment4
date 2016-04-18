@@ -82,12 +82,8 @@ package
 			_radioButton[1] = new RadioButtonClass(new Rectangle(345, 530,200, 150), RadioONImageI,RadioOFFImageI,"Image Mode");	
 			_radioButton[1].swtichClicked(false);
 			
-			
-			
 			_radioButton[0].getRadioButton().addEventListener(TouchEvent.TOUCH,onRadioClick);
 			_radioButton[1].getRadioButton().addEventListener(TouchEvent.TOUCH,onRadioClick);
-			
-			
 			
 			addChild(_radioButton[0].getRadioButton());
 			addChild(_radioButton[1].getRadioButton());

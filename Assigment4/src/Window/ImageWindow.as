@@ -24,6 +24,7 @@ package Window
 		
 		private var _nextButton : ButtonClass;
 		private var _prevButton : ButtonClass;
+		private var _addButton : ButtonClass;
 		private var _buttonList : ButtonListClass;
 		
 		private var _curImage : Image;
@@ -42,6 +43,7 @@ package Window
 			_vewImage = new Image(_componentDictionary["Window.png"]);
 		
 			var buttonListImage : Image = new Image(_componentDictionary["List.png"]);
+			var addImage : Image = new Image(_componentDictionary["LoadSprite.png"]);
 			var nextImage:Image = new Image(_componentDictionary["Next.png"]);
 			var prevImage:Image = new Image(_componentDictionary["Prev.png"]);
 			
@@ -50,19 +52,19 @@ package Window
 			_vewImage.width = _windowRect.width;
 			_vewImage.height = _windowRect.height/2 + 50;
 			
-			_buttonList = new ButtonListClass(new Rectangle(_windowRect.x-30, _vewImage.height+55,350 ,200 ),buttonListImage,drawSprite);
 			_nextButton = new ButtonClass(new Rectangle(_windowRect.x+190, _vewImage.height+30, nextImage.width, nextImage.height),nextImage);
 			_prevButton = new ButtonClass(new Rectangle(_windowRect.x+40, _vewImage.height+30, prevImage.width, prevImage.height),prevImage);
+			_addButton = new ButtonClass(new Rectangle(460, 390, addImage.width/2, addImage.height),addImage, "이미지 추가");
 			
 			addChild(_vewImage);
-			addChild(_buttonList.getList());
+			addChild(_addButton.getButton());
 			addChild(_nextButton.getButton());
 			addChild(_prevButton.getButton());
 			
 			_nextButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			_prevButton.getButton().addEventListener(TouchEvent.TOUCH,onButtonClick);
 			
-			addSheetButton();
+			addSheetButton(buttonListImage);
 		}
 		
 		/**
@@ -99,8 +101,11 @@ package Window
 		 * 버튼 리스트 안에있는 SpriteSheet 개수만큼 등록 
 		 * 
 		 */		
-		private function addSheetButton() : void
+		private function addSheetButton(buttonListImage : Image) : void
 		{
+			_buttonList = new ButtonListClass(new Rectangle(_windowRect.x-30, _vewImage.height+55,350 ,200 ),buttonListImage,drawSprite);
+			addChild(_buttonList.getList());
+			
 			var buttonPos : int = 0;
 			
 			for(var i :int = 0; i < _curTexture.getsubVector().length; i++)

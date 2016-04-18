@@ -42,7 +42,6 @@ package Window
 		
 		private var _createImagewindow : Function;
 		private var _viewButtonCnt : int = 0;
-		private var _drawFirst : Boolean = false;
 		
 		/**
 		 * 
@@ -260,17 +259,16 @@ package Window
 			var subTexture : Atlastexture = new Atlastexture(Texture.fromBitmap(_cSpriteLoader.getSpriteSheetDictionary()[spriteName]),_cSpriteLoader.getxmlDictionary()[spritexml]);
 			
 			trace(spriteName);
-			if(_drawFirst == false)
-			{
-				_drawFirst = true;
-				_startButton.getButton().visible = true;
-				_stopButton.getButton().visible = true;
-				_createImagewindow(subTexture);
-			}
-			else
+			if(_cClip)
 			{
 				removeChild(_cClip);
 				_cClip.release();
+			}
+			else
+			{
+				_startButton.getButton().visible = true;
+				_stopButton.getButton().visible = true;
+				_createImagewindow(subTexture);
 			}
 				
 			_cClip= new AnimaitonClip(subTexture.getsubVector(),5,drawAnimation);
@@ -286,7 +284,6 @@ package Window
 		 */		
 		private function drawAnimation(_textures : Texture) : void
 		{
-		
 			_cClip.width = _textures.width;
 			_cClip.height = _textures.height;
 	
