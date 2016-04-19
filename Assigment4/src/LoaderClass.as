@@ -101,6 +101,12 @@ package
 		
 		private function buildXMLLoader():void
 		{
+			if(_xmlName.length == 0 && _isXml == true)
+			{
+				trace("xml 존재안함");
+				return;
+			}
+				
 			
 			_loaderXML = new URLLoader(new URLRequest(_xmlName[0]));
 			_loaderXML.addEventListener(Event.COMPLETE, onLoadXMLComplete);
@@ -108,6 +114,12 @@ package
 		
 		private function buildLoader():void
 		{
+			if(_xmlName.length == 0 && _isXml == true)
+			{
+				trace("xml 존재안함");
+				return;
+			}
+			
 			sImageMaxCount =_urlArray.length; 
 			sImageMaxCount+=_xmlName.length;
 			
