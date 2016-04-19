@@ -52,7 +52,7 @@ package MakeSheet
 			{
 				var _bitmapByteArray:ByteArray = new ByteArray();
 				_spriteSheetBitmap[i].bitmapData.encode(new Rectangle(0,0,_spriteSheetBitmap[i].width,_spriteSheetBitmap[i].height), new PNGEncoderOptions(), _bitmapByteArray);
-				_saveFile.nativePath += "\\Sprite_Sheet["+i+"].png";
+				_saveFile.nativePath += "\\NewSprite_Sheet"+i+".png";
 				_fileStream.open(_saveFile, FileMode.WRITE);
 				_fileStream.writeBytes(_bitmapByteArray);
 				_saveFile.nativePath = tempPath;
@@ -64,7 +64,7 @@ package MakeSheet
 				_saveFile.nativePath += "\\NewSprite_Sheet"+j+".xml";
 				_fileStream.open(_saveFile, FileMode.WRITE);
 				_fileStream.writeUTFBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-				_fileStream.writeUTFBytes("<TextureAtlas ImagePath=\"" + "sprite_sheet["+j+"].png" + "\">\n");
+				_fileStream.writeUTFBytes("<TextureAtlas ImagePath=\"" + "NewSprite_sheet"+j+".png" + "\">\n");
 				for(var k : int = 0; k< _spriteSheetName[j].length; k++)
 				{
 					_fileStream.writeMultiByte("<SubTexture name=\"" + _spriteSheetName[j][k] + "\" x=\"" + _spriteSheetRect[j][k].x 

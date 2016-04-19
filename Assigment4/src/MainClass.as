@@ -32,7 +32,7 @@ package
 		private var _componentAtlas : Atlastexture; 
 		
 		private var _backButton :ButtonClass;
-		private var _radioButton : Vector.<RadioButtonClass> = new Vector.<RadioButtonClass>;    //라디오 버튼은  Animation/Image Window를 조절 하는 버튼 이므로 Main에 삽입
+		private var _radioButton : Vector.<RadioButtonClass>;    //라디오 버튼은  Animation/Image Window를 조절 하는 버튼 이므로 Main에 삽입
 		public function MainClass()
 		{
 			addEventListener(Event.ADDED_TO_STAGE, initialize);
@@ -61,10 +61,14 @@ package
 			
 			var loadImage : Image = new Image(_componentAtlas.getsubSpriteSheet()["LoadSprite.png"]);
 			
-			_backButton = new ButtonClass(new Rectangle(345,390, loadImage.width/2, loadImage.height),loadImage,"Back");
-			_backButton.getButton().addEventListener(TouchEvent.TOUCH,onBackClick);
+			if(!_backButton)
+			{
+				_backButton = new ButtonClass(new Rectangle(345,390, loadImage.width/2, loadImage.height),loadImage,"Back");
+				_backButton.getButton().addEventListener(TouchEvent.TOUCH,onBackClick);
+				
+				addChild(_backButton.getButton());
+			}
 			
-			addChild(_backButton.getButton());
 			addChild(_cAnimationWindow);
 		}
 		/**
@@ -73,24 +77,29 @@ package
 		 */		
 		private function drawRadioButton(curTexture : Atlastexture, curBitmap : AtlasBitmap) : void
 		{
-			var RadioOFFImageA:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioOFF.png"]);
-			var RadioONImageA:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioON.png"]);
-			
-			var RadioOFFImageI:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioOFF.png"]);
-			var RadioONImageI:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioON.png"]);
-			
-			_radioButton[0] = new RadioButtonClass(new Rectangle(345, 500, 200, 150), RadioONImageA,RadioOFFImageA,"Animation Mode");
-			_radioButton[1] = new RadioButtonClass(new Rectangle(345, 540,200, 150), RadioONImageI,RadioOFFImageI,"Image Mode");	
-			_radioButton[1].swtichClicked(false);
-			
-			_radioButton[0].getRadioButton().addEventListener(TouchEvent.TOUCH,onRadioClick);
-			_radioButton[1].getRadioButton().addEventListener(TouchEvent.TOUCH,onRadioClick);
-			
-			addChild(_radioButton[0].getRadioButton());
-			addChild(_radioButton[1].getRadioButton());
+	
+		
 			if(_cImageWindow)
 				_cImageWindow.release();
-			
+			else
+			{
+				_radioButton = new Vector.<RadioButtonClass>;
+				var RadioOFFImageA:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioOFF.png"]);
+				var RadioONImageA:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioON.png"]);
+				
+				var RadioOFFImageI:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioOFF.png"]);
+				var RadioONImageI:Image = new Image(_componentAtlas.getsubSpriteSheet()["RadioON.png"]);
+				
+				_radioButton[0] = new RadioButtonClass(new Rectangle(345, 500, 200, 150), RadioONImageA,RadioOFFImageA,"Animation Mode");
+				_radioButton[1] = new RadioButtonClass(new Rectangle(345, 540,200, 150), RadioONImageI,RadioOFFImageI,"Image Mode");	
+				_radioButton[1].swtichClicked(false);
+				
+				_radioButton[0].getRadioButton().addEventListener(TouchEvent.TOUCH,onRadioClick);
+				_radioButton[1].getRadioButton().addEventListener(TouchEvent.TOUCH,onRadioClick);
+				
+				addChild(_radioButton[0].getRadioButton());
+				addChild(_radioButton[1].getRadioButton());
+			}
 			_cImageWindow = new ImageWindow(0,30,stage.stageWidth,stage.stageHeight,_componentAtlas.getsubSpriteSheet(),curTexture,curBitmap);
 			_cImageWindow.visible = false;
 			addChild(_cImageWindow);
@@ -137,16 +146,27 @@ package
 				{
 					for(var i: int =0; i < _radioButton.length; i++)
 					{
-						_radioButton[i].release();
 						removeChild(_radioButton[i].getRadioButton());
+						_radioButton[i].release();
+						_radioButton[i] = null;
+						
 					}
+					_radioButton = null;
 				}
 				_backButton.clickedONMotion();
 				if(_cAnimationWindow)
+				{
 					_cAnimationWindow.release();
+					_cAnimationWindow = null;
+				}
+					
+				
 				if(_cImageWindow)
+				{
 					_cImageWindow.release();
-				_backButton.release();
+					_cImageWindow = null;
+				}
+					
 				
 				initWindow();
 			}
@@ -157,10 +177,7 @@ package
 		{
 			// TODD @유영선 해제 필요 하면 여기다 추가
 			trace("메인 클래스 해제");
-			for(var i: int =0; i < _radioButton.length; i++)
-			{
-				_radioButton[i].release();
-			}
+	
 			_cAnimationWindow.release();
 			_cImageWindow.release();
 			
